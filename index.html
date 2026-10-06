@@ -16,7 +16,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><linearGradient id='g' x1='34' y1='57' x2='57' y2='30' gradientUnits='userSpaceOnUse'><stop offset='0' stop-color='%2322d3ee'/><stop offset='.5' stop-color='%23818cf8'/><stop offset='1' stop-color='%23e879f9'/></linearGradient></defs><rect width='64' height='64' rx='15' fill='%230c0c1d'/><rect x='6' y='6' width='24' height='24' rx='6.5' fill='%23f4f6ff'/><rect x='34' y='6' width='24' height='24' rx='6.5' fill='%23f4f6ff' opacity='.92'/><rect x='6' y='34' width='24' height='24' rx='6.5' fill='%23f4f6ff' opacity='.85'/><g fill='url(%23g)'><rect x='34' y='50' width='7' height='7' rx='2'/><rect x='42' y='50' width='7' height='7' rx='2'/><rect x='50' y='50' width='7' height='7' rx='2'/><rect x='34' y='42' width='7' height='7' rx='2'/><rect x='42' y='42' width='7' height='7' rx='2'/><rect x='50' y='42' width='7' height='7' rx='2' opacity='.7'/><rect x='34' y='34' width='7' height='7' rx='2'/><rect x='42' y='34' width='6' height='6' rx='1.8' opacity='.5'/><rect x='51' y='34.5' width='3' height='3' rx='1' opacity='.45'/><rect x='54' y='29.5' width='2.5' height='2.5' rx='.9' opacity='.3'/><rect x='48.5' y='28' width='2.2' height='2.2' rx='.8' opacity='.22'/><rect x='56' y='25.5' width='1.8' height='1.8' rx='.7' opacity='.15'/></g></svg>" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Syncopate:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Merriweather:opsz,wght@18..144,300..900&display=swap" rel="stylesheet" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -89,6 +89,8 @@
     --bad: #f87171;
     --grad: linear-gradient(92deg, var(--c1), var(--c2), var(--c3));
     --radius: 18px;
+    --font-serif: "Merriweather", ui-serif, Georgia, "Times New Roman", serif;
+    --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -98,12 +100,12 @@
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-    line-height: 1.6;
+    font-family: var(--font-serif);
+    line-height: 1.7;
     overflow-x: hidden;
   }
 
-  h1, h2, h3, .display { font-family: "Space Grotesk", "Inter", sans-serif; }
+  h1, h2, h3, .display { font-family: var(--font-serif); }
 
   ::selection { background: rgba(129, 140, 248, 0.4); }
 
@@ -152,8 +154,8 @@
     display: flex; align-items: center; justify-content: space-between; gap: 16px;
   }
   .logo {
-    font-family: "Syncopate", "Space Grotesk", sans-serif;
-    font-weight: 400; font-size: 0.92rem; letter-spacing: 0.12em;
+    font-family: var(--font-mono);
+    font-weight: 500; font-size: 0.88rem; letter-spacing: 0.14em;
     text-transform: uppercase;
     text-decoration: none; color: var(--text);
     display: flex; align-items: center; gap: 10px;
@@ -191,8 +193,8 @@
   /* ---------- buttons ---------- */
   .btn {
     display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-    font-family: "Space Grotesk", sans-serif;
-    font-weight: 600; font-size: 0.95rem;
+    font-family: var(--font-mono);
+    font-weight: 600; font-size: 0.9rem; letter-spacing: 0.02em;
     padding: 13px 26px; border-radius: 999px;
     border: 1px solid transparent; cursor: pointer;
     text-decoration: none; transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
@@ -232,7 +234,8 @@
   }
   .hero-badge {
     display: inline-flex; align-items: center; gap: 8px;
-    font-size: 0.8rem; font-weight: 500; letter-spacing: 0.06em;
+    font-family: var(--font-mono);
+    font-size: 0.74rem; font-weight: 500; letter-spacing: 0.06em;
     color: var(--muted);
     border: 1px solid var(--card-border); background: var(--card);
     padding: 8px 16px; border-radius: 999px; margin-bottom: 28px;
@@ -240,9 +243,9 @@
     animation: rise 0.8s ease both;
   }
   .hero h1 {
-    font-family: "Syncopate", "Space Grotesk", sans-serif;
+    font-family: var(--font-serif);
     font-size: clamp(1.9rem, 8vw, 5.8rem);
-    font-weight: 400; letter-spacing: 0.12em; line-height: 1.1;
+    font-weight: 900; letter-spacing: -0.01em; line-height: 1.1;
     animation: rise 0.8s 0.1s ease both;
     perspective: 900px;
     white-space: nowrap;
@@ -254,10 +257,9 @@
     will-change: transform;
   }
   .hero h1 .main {
-    text-transform: uppercase;
     color: #f4f6ff;
     text-shadow: 0 0 40px rgba(148, 163, 255, 0.4);
-    margin-right: -0.12em; /* letter-spacing ka trailing gap cancel — .online name se chipkega */
+    margin-right: -0.02em; /* serif kerning — .online name se chipkega */
   }
   .hero h1 .tld {
     display: inline-block; font-size: 0.4em; font-weight: 400;
@@ -271,6 +273,7 @@
   }
   @keyframes hue-slide { from { background-position: 0% 0; } to { background-position: 100% 0; } }
   @keyframes rise { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes rise-c { from { opacity: 0; transform: translate(-50%, 26px); } to { opacity: 1; transform: translate(-50%, 0); } }
 
   .hero .copy {
     font-size: clamp(1.05rem, 2.4vw, 1.3rem); color: var(--muted);
@@ -289,7 +292,8 @@
     margin-top: 36px; animation: rise 0.8s 0.3s ease both;
   }
   .hero-meta {
-    margin-top: 30px; color: var(--muted); font-size: 0.85rem; letter-spacing: 0.08em;
+    margin-top: 30px; color: var(--muted); font-size: 0.78rem; letter-spacing: 0.06em;
+    font-family: var(--font-mono);
     display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center;
     animation: rise 0.8s 0.4s ease both;
   }
@@ -297,10 +301,11 @@
   .hero-meta .sep { opacity: 0.4; }
 
   .scroll-hint {
-    position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%);
-    color: var(--muted); font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+    position: absolute; bottom: 26px; left: 50%; transform: translate(-50%, 0);
+    color: var(--muted); font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
+    font-family: var(--font-mono);
     display: flex; flex-direction: column; align-items: center; gap: 8px; opacity: 0.7;
-    animation: rise 1s 0.8s ease both;
+    animation: rise-c 1s 0.8s ease both;
   }
   .scroll-hint .mouse {
     width: 22px; height: 34px; border: 1.5px solid var(--muted); border-radius: 12px; position: relative;
@@ -315,8 +320,8 @@
   /* floating tags */
   .tag-chip {
     position: absolute; z-index: 1;
-    font-family: "Space Grotesk", sans-serif;
-    font-size: 0.82rem; font-weight: 500; color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.78rem; font-weight: 500; color: var(--muted);
     background: var(--card); border: 1px solid var(--card-border);
     padding: 7px 14px; border-radius: 999px;
     backdrop-filter: blur(6px);
@@ -363,7 +368,7 @@
   }
   .stat:first-child { border-left: none; }
   .stat .num {
-    font-family: "Space Grotesk", sans-serif;
+    font-family: var(--font-serif);
     font-size: clamp(1.9rem, 4.5vw, 2.8rem); font-weight: 700;
     background: var(--grad);
     -webkit-background-clip: text; background-clip: text;
@@ -399,7 +404,7 @@
   .timebar .fill.low { background: var(--bad); }
 
   .quiz-q { font-size: 1.25rem; font-weight: 600; line-height: 1.4; margin-bottom: 26px; }
-  .quiz-q .seq { font-family: "Space Grotesk", sans-serif; letter-spacing: 0.04em; }
+  .quiz-q .seq { font-family: var(--font-mono); letter-spacing: 0.04em; }
 
   .quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   @media (max-width: 520px) { .quiz-options { grid-template-columns: 1fr; } }
@@ -407,7 +412,7 @@
     display: flex; align-items: center; gap: 12px;
     background: rgba(255, 255, 255, 0.045);
     border: 1px solid var(--card-border); border-radius: 14px;
-    color: var(--text); font-family: "Space Grotesk", sans-serif;
+    color: var(--text); font-family: var(--font-serif);
     font-size: 1rem; font-weight: 500;
     padding: 15px 18px; cursor: pointer;
     transition: transform 0.15s ease, border-color 0.15s, background 0.15s;
@@ -478,7 +483,7 @@
     0%, 100% { box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45); }
     50% { box-shadow: 0 24px 80px rgba(248, 113, 113, 0.22); }
   }
-  .points-line { font-family: "Space Grotesk", sans-serif; font-size: 1.05rem; color: var(--text); margin-bottom: 20px; }
+  .points-line { font-family: var(--font-serif); font-size: 1.05rem; color: var(--text); margin-bottom: 20px; }
   .points-line b { color: var(--c1); font-size: 1.35rem; }
 
   .score-ring-wrap { position: relative; width: 150px; height: 150px; margin: 0 auto 20px; }
@@ -491,7 +496,7 @@
   .score-ring-wrap .score-num {
     position: absolute; inset: 0; display: flex; flex-direction: column;
     align-items: center; justify-content: center;
-    font-family: "Space Grotesk", sans-serif;
+    font-family: var(--font-serif);
   }
   .score-num .v { font-size: 2.2rem; font-weight: 700; line-height: 1; }
   .score-num .of { font-size: 0.75rem; color: var(--muted); margin-top: 4px; }
@@ -532,7 +537,7 @@
     display: inline-flex; align-items: center; gap: 8px;
     padding: 12px 20px; border-radius: 999px;
     background: var(--card); border: 1px solid var(--card-border);
-    font-family: "Space Grotesk", sans-serif; font-size: 0.92rem; color: var(--text);
+    font-family: var(--font-serif); font-size: 0.92rem; color: var(--text);
     cursor: default; transition: transform 0.18s, border-color 0.18s, box-shadow 0.18s, background 0.18s;
   }
   .chip:hover {
@@ -562,7 +567,7 @@
     display: flex; align-items: center; justify-content: center;
     box-shadow: 0 14px 34px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
   }
-  .app-label { font-family: "Space Grotesk", sans-serif; color: var(--text); font-weight: 600; font-size: 0.92rem; }
+  .app-label { font-family: var(--font-mono); color: var(--text); font-weight: 600; font-size: 0.82rem; }
 
   .mock-browser { width: 100%; background: rgba(255, 255, 255, 0.04); border: 1px solid var(--card-border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
   .browser-chrome { display: flex; align-items: center; gap: 6px; padding: 9px 12px 0; background: rgba(255, 255, 255, 0.05); }
@@ -574,7 +579,7 @@
     background: rgba(255, 255, 255, 0.08); border: 1px solid var(--card-border); border-bottom: none;
     padding: 5px 14px; border-radius: 9px 9px 0 0;
   }
-  .browser-url { padding: 12px 16px; font-size: 0.8rem; color: var(--muted); font-family: "Space Grotesk", sans-serif; letter-spacing: 0.03em; border-top: 1px solid var(--card-border); }
+  .browser-url { padding: 12px 16px; font-size: 0.78rem; color: var(--muted); font-family: var(--font-mono); letter-spacing: 0.02em; border-top: 1px solid var(--card-border); }
 
   .mock-phone {
     width: 124px; height: 216px; border-radius: 26px;
@@ -586,7 +591,7 @@
     background: linear-gradient(160deg, #10102a, #0a0a18);
     padding: 14px 11px; display: flex; flex-direction: column; gap: 9px; overflow: hidden;
   }
-  .phone-head { font-family: "Syncopate", "Space Grotesk", sans-serif; font-size: 0.52rem; letter-spacing: 0.1em; text-transform: uppercase; color: #f4f6ff; }
+  .phone-head { font-family: var(--font-mono); font-size: 0.52rem; letter-spacing: 0.1em; text-transform: uppercase; color: #f4f6ff; }
   .phone-q { font-size: 0.66rem; color: var(--text); line-height: 1.45; font-weight: 500; }
   .phone-bar { height: 4px; border-radius: 4px; background: rgba(255, 255, 255, 0.1); overflow: hidden; }
   .phone-bar span { display: block; width: 68%; height: 100%; background: var(--grad); }
@@ -633,7 +638,7 @@
     display: none;
     margin: 0 auto 26px; padding: 10px 22px; border-radius: 999px;
     border: 1px dashed rgba(52, 211, 153, 0.55);
-    color: #a7f3d0; font-family: "Space Grotesk", sans-serif; font-weight: 600;
+    color: #a7f3d0; font-family: var(--font-mono); font-weight: 600;
     background: rgba(52, 211, 153, 0.07);
     width: fit-content; text-align: center;
   }
@@ -650,7 +655,7 @@
   details.faq-item[open] { border-color: rgba(129, 140, 248, 0.45); }
   details.faq-item summary {
     list-style: none; cursor: pointer; padding: 20px 24px;
-    font-family: "Space Grotesk", sans-serif; font-weight: 600; font-size: 1.02rem;
+    font-family: var(--font-serif); font-weight: 600; font-size: 1.02rem;
     display: flex; justify-content: space-between; align-items: center; gap: 16px;
   }
   details.faq-item summary::-webkit-details-marker { display: none; }
@@ -667,8 +672,8 @@
   }
   footer .foot-mark { display: block; margin: 0 auto 12px; filter: drop-shadow(0 0 10px rgba(129, 140, 248, 0.35)); }
   footer .foot-name {
-    font-family: "Syncopate", "Space Grotesk", sans-serif;
-    font-weight: 400; color: #f4f6ff; font-size: 0.95rem;
+    font-family: var(--font-mono);
+    font-weight: 500; color: #f4f6ff; font-size: 0.95rem;
     letter-spacing: 0.14em; text-transform: uppercase;
   }
   footer .foot-name .main { margin-right: -0.12em; }
@@ -743,9 +748,9 @@
   /* ---------- mobile polish ---------- */
   @media (max-width: 640px) {
     .hero { padding: 96px 18px 84px; }
-    .hero-mark { width: 64px; height: 64px; margin-bottom: 18px; }
+    .hero-mark { margin-bottom: 18px; } /* size canvas ke inline style se aati hai — override mat karo */
     .hero-badge { font-size: 0.72rem; padding: 7px 13px; margin-bottom: 20px; }
-    .hero h1 { font-size: clamp(2.1rem, 11.5vw, 3.6rem); letter-spacing: 0.1em; }
+    .hero h1 { font-size: clamp(2rem, 10.5vw, 3.4rem); letter-spacing: -0.01em; }
     .hero .copy { font-size: 1.02rem; margin-top: 18px; min-height: 2.6em; }
     .hero-ctas { margin-top: 26px; gap: 10px; }
     .hero-ctas .btn { padding: 13px 20px; font-size: 0.9rem; }
@@ -2089,8 +2094,9 @@ $("#whatsapp-btn").addEventListener("click", () => {
     const CW = 230, CH = 150, LS = 60, K = LS / 64;
     canvas.width = CW * DPR; canvas.height = CH * DPR;
     canvas.style.width = CW + "px";
+    canvas.style.height = CH + "px"; // bina iske DPR-2/3 phones par canvas 300-450px tall dikhta hai
     ctx.scale(DPR, DPR);
-    const LX = (CW - LS) / 2 - 16, LY = (CH - LS) / 2 + 8; // biased down-left; embers fly up-right
+    const LX = (CW - LS) / 2, LY = (CH - LS) / 2; // mark centered in the canvas
     heroState.cx = LX + LS / 2;
     heroState.cy = LY + LS / 2;
 
@@ -2365,7 +2371,19 @@ $("#whatsapp-btn").addEventListener("click", () => {
       const h = heroCanvas.getBoundingClientRect();
       const n = navMark.getBoundingClientRect();
       if (!n.width) return;
-      if (swap.at === "hero" && h.bottom < 140) {
+      // mark hero me tab tak hai jab tak uska canvas screen par substantially visible hai
+      // thresholds viewport-relative hain — desktop aur phone dono par same behaviour
+      const wantHero = h.bottom > 150 && h.top < innerHeight * 0.9;
+      if (wantHero && swap.at !== "hero") {
+        // hero on screen — the header mark snaps to dust and rebuilds the hero
+        swap.at = "hero";
+        fly({
+          sx: n.left + n.width / 2, sy: n.top + n.height / 2,
+          ex: h.left + heroState.cx, ey: h.top + heroState.cy,
+          s0: n.width, s1: 60, srcNav: true, dstNav: false,
+          onArrive: () => heroState.land(),
+        });
+      } else if (!wantHero && swap.at !== "nav") {
         // scrolling away — the mark snaps to dust and rebuilds itself in the header
         swap.at = "nav";
         fly({
@@ -2373,15 +2391,6 @@ $("#whatsapp-btn").addEventListener("click", () => {
           ex: n.left + n.width / 2, ey: n.top + n.height / 2,
           s0: 60, s1: n.width, srcNav: false, dstNav: true,
           onArrive: () => navMark.classList.remove("swapped-out"),
-        });
-      } else if (swap.at === "nav" && h.bottom > 260 && h.top < innerHeight) {
-        // back at the hero — the header mark snaps to dust and rebuilds the hero
-        swap.at = "hero";
-        fly({
-          sx: n.left + n.width / 2, sy: n.top + n.height / 2,
-          ex: h.left + heroState.cx, ey: h.top + heroState.cy,
-          s0: n.width, s1: 60, srcNav: true, dstNav: false,
-          onArrive: () => heroState.land(),
         });
       }
     }
