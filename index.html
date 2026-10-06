@@ -234,11 +234,17 @@
     overflow: visible; pointer-events: none;
   }
   .cord-path {
-    fill: none; stroke: var(--cord-line); stroke-width: 2;
+    fill: none; stroke: var(--cord-line); stroke-width: 2.6;
     stroke-linecap: round;
     transition: stroke 0.25s ease;
   }
+  .cord-strand {
+    fill: none; stroke: var(--surface-solid); stroke-width: 1;
+    stroke-linecap: round; stroke-dasharray: 4 6; opacity: 0.6;
+    transition: stroke 0.25s ease;
+  }
   .pull-cord.engaged .cord-path { stroke: var(--c2); }
+  .pull-cord.engaged .cord-strand { stroke: var(--c2); opacity: 0.85; }
   .cord-knob {
     position: absolute; top: 0; left: 50%;
     width: 30px; height: 40px; margin: -7px 0 0 -15px;
@@ -936,7 +942,7 @@
 
 <!-- theme pull-cord — asli rassi, pakdo kheencho chhodo -->
 <button class="pull-cord" id="theme-cord" type="button" aria-label="Toggle dark / light mode" title="Rassi kheencho — dark / light">
-  <svg class="cord-rope" aria-hidden="true"><path class="cord-path" d=""/></svg>
+  <svg class="cord-rope" aria-hidden="true"><path class="cord-path" d=""/><path class="cord-strand" d=""/></svg>
   <span class="cord-knob" aria-hidden="true">
     <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M18.8 5.2l-1.6 1.6M6.8 17.2l-1.6 1.6"/></svg>
     <svg class="i-moon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.6 14.2A8.8 8.8 0 0 1 9.8 3.4a.7.7 0 0 0-.9-.9 9.9 9.9 0 1 0 12.6 12.6.7.7 0 0 0-.9-.9z"/></svg>
@@ -2028,16 +2034,17 @@ $("#whatsapp-btn").addEventListener("click", () => {
    ===================================================== */
 const cord = $("#theme-cord");
 const ropePath = cord.querySelector(".cord-path");
+const strandPath = cord.querySelector(".cord-strand");
 const knobEl = cord.querySelector(".cord-knob");
 cord.setAttribute("aria-pressed", String(isDark()));
 
-/* rope physics — knob is a pendulum bob on a rope of fixed length */
+/* rope physics — knob pendulum bob hai, rope fixed-length daga */
 let lastPointerUp = 0, lastFlip = 0;
 const st = {
-  kx: 0, ky: 110, vx: 0, vy: 0,       // knob offset from the anchor (top-centre)
-  tx: 0, ty: 110,                      // pointer target in button space
-  ax: 0, REST: 110, REACH: 160, ENGAGE: 56,
-  dragging: false, engaged: false,
+  kx: 0, ky: 110, vx: 0, vy: 0,       // knob offset anchor (top-centre) se
+  tx: 0, ty: 110,                      // pointer target (button space)
+  ax: 0, REST: 116, REACH: 165, ENGAGE: 54,
+  dragging: false, engaged: false, pid: null, captured: false, lostSince: 0,
   t0: performance.now(), last: performance.now(),
 };
 metrics();
@@ -2045,9 +2052,9 @@ st.ky = st.REST;
 
 function metrics() {
   const h = cord.clientHeight;
-  st.REST = Math.max(60, h - 34);      // rope length at rest
-  st.REACH = h + 16;                   // hard stretch limit
-  st.ENGAGE = Math.max(40, h * 0.4);   // pull this far to arm the flip
+  st.REST = Math.max(64, h - 26);      // aaram ki rassi
+  st.REACH = h + 22;                   // max stretch
+  st.ENGAGE = Math.max(38, h * 0.36);  // itna kheencho to flip
   if (!st.dragging) { st.kx = 0; st.ky = st.REST; st.vx = 0; st.vy = 0; }
 }
 addEventListener("resize", metrics);
@@ -2061,90 +2068,112 @@ function flipTheme() {
   const dark = isDark();
   try { localStorage.setItem("iqtag-theme", dark ? "dark" : "light"); } catch (e) {}
   cord.setAttribute("aria-pressed", String(dark));
-  document.dispatchEvent(new CustomEvent("iqtag:theme")); // canvases re-dress in the new palette
+  document.dispatchEvent(new CustomEvent("iqtag:theme"));
   setTimeout(() => document.documentElement.classList.remove("theming"), 650);
 }
 
-/* physics + render loop — gravity, rope constraint, air drag, halki hawa */
+function release() {
+  if (!st.dragging) return;
+  const doFlip = st.engaged;                 // sahi kheench ke chhoda → mode badlo
+  st.dragging = false;
+  st.engaged = false;
+  st.pid = null; st.captured = false; st.lostSince = 0;
+  lastPointerUp = performance.now();
+  cord.classList.remove("engaged");
+  if (doFlip) flipTheme();
+}
+
+/* physics + render loop */
 (function loop(now) {
   requestAnimationFrame(loop);
   const dt = Math.min(0.032, (now - st.last) / 1000 || 0.016);
   st.last = now;
   const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  /* safety net — pointer kahin kho jaye to rassi kabhi stuck na rahe */
+  if (st.dragging && st.captured && !cord.hasPointerCapture(st.pid)) {
+    if (!st.lostSince) st.lostSince = now;              // capture chori ho gaya — lost pointer
+    else if (now - st.lostSince > 1200) release();
+  } else st.lostSince = 0;
+
   if (st.dragging) {
-    const k = 1 - Math.exp(-dt / 0.045);          // smooth rubbery chase
+    const k = 1 - Math.exp(-dt / 0.055);           // smooth rubbery chase
     const nx = st.kx + (st.tx - st.kx) * k;
     const ny = st.ky + (st.ty - st.ky) * k;
-    st.vx = (nx - st.kx) / dt; st.vy = (ny - st.ky) / dt; // release momentum ke liye
+    st.vx = (nx - st.kx) / dt; st.vy = (ny - st.ky) / dt;
     st.kx = nx; st.ky = ny;
   } else {
-    st.vy += 2600 * dt;                            // gravity
-    if (!reduced) st.vx += Math.sin((now - st.t0) * 0.0012) * 30 * dt; // halki hawa — rope zinda lagti hai
-    st.vx *= Math.exp(-1.5 * dt); st.vy *= Math.exp(-0.8 * dt);
+    st.vy += 2000 * dt;                             // gravity — halki weight
+    if (!reduced) st.vx += Math.sin((now - st.t0) * 0.0009) * 20 * dt; // halki hawa
+    st.vx *= Math.exp(-1.15 * dt); st.vy *= Math.exp(-0.6 * dt);
     st.kx += st.vx * dt; st.ky += st.vy * dt;
     const d = Math.hypot(st.kx, st.ky);
-    if (d > st.REST) {                             // rope sirf itni hi lambi — pendulum constraint
+    if (d > st.REST) {                              // rassi fixed length — pendulum
       const ux = st.kx / d, uy = st.ky / d;
       st.kx = ux * st.REST; st.ky = uy * st.REST;
       const radial = st.vx * ux + st.vy * uy;
-      if (radial > 0) { st.vx -= radial * ux; st.vy -= radial * uy; st.vx *= 0.985; st.vy *= 0.985; }
+      if (radial > 0) { st.vx -= radial * ux; st.vy -= radial * uy; st.vx *= 0.988; st.vy *= 0.988; }
     }
-    if (st.ky < 12) { st.ky = 12; st.vy = Math.abs(st.vy) * 0.3; } // chhat ke upar nahi
+    if (st.ky < 10) { st.ky = 10; st.vy = Math.abs(st.vy) * 0.25; }
   }
 
-  /* render — curved rope (sag ke saath) + knob */
+  /* render — jhuki hui curved rope + braided strand + knob */
   const AX = cord.clientWidth / 2;
   const ex = AX + st.kx, ey = 13 + st.ky;
   const d = Math.hypot(st.kx, st.ky);
   const sag = st.dragging
-    ? Math.max(0, st.REST - d) * 0.14
-    : (reduced ? 5 : 9 + Math.sin((now - st.t0) * 0.0021) * 2.5);
-  ropePath.setAttribute("d", `M ${AX.toFixed(1)} 0 Q ${((AX + ex) / 2).toFixed(1)} ${(ey / 2 + sag).toFixed(1)} ${ex.toFixed(1)} ${ey.toFixed(1)}`);
+    ? 1.5 + Math.max(0, st.REST - d) * 0.12
+    : (reduced ? 6 : 13 + Math.sin((now - st.t0) * 0.0019) * 3);
+  const mx = (AX + ex) / 2, my = ey / 2;
+  const dMain = `M ${AX.toFixed(1)} 0 Q ${mx.toFixed(1)} ${(my + sag).toFixed(1)} ${ex.toFixed(1)} ${ey.toFixed(1)}`;
+  ropePath.setAttribute("d", dMain);
+  strandPath.setAttribute("d", `M ${AX.toFixed(1)} 0 Q ${(mx + 1.6).toFixed(1)} ${(my + sag - 1.5).toFixed(1)} ${(ex - 0.8).toFixed(1)} ${(ey - 1).toFixed(1)}`);
   knobEl.style.transform = `translate(${st.kx.toFixed(1)}px, ${st.ky.toFixed(1)}px)`;
 })(st.last);
 
 cord.addEventListener("pointerdown", (e) => {
   metrics();
-  try { cord.setPointerCapture(e.pointerId); } catch (err) {} // synthetic/test pointers ke bina bhi chale
+  st.pid = e.pointerId;
+  st.captured = false;
+  try { cord.setPointerCapture(e.pointerId); st.captured = cord.hasPointerCapture(e.pointerId); } catch (err) {}
   const r = cord.getBoundingClientRect();
-  st.ax = r.left + r.width / 2;                    // anchor = button ka top-centre
+  st.ax = r.left + r.width / 2;
   st.dragging = true;
   st.engaged = false;
-  lastPointerUp = performance.now();               // click-guard fresh — kahin se bhi pakdo
+  st.lostSince = 0;
+  lastPointerUp = performance.now();
   cord.classList.remove("engaged");
-  const dx = e.clientX - st.ax, dy = e.clientY;    // anchor viewport ke (ax, 0) par hai
+  const dx = e.clientX - st.ax, dy = e.clientY;
   const dd = Math.hypot(dx, dy) || 1;
-  const lim = Math.min(dd, st.REST);               // rassi pakadte hi taut
+  const lim = Math.min(dd, st.REST);
   st.tx = dx / dd * lim; st.ty = dy / dd * lim;
 });
 
 cord.addEventListener("pointermove", (e) => {
   if (!st.dragging) return;
-  let dx = e.clientX - st.ax, dy = e.clientY;      // anchor viewport me (ax, 0)
+  const dx = e.clientX - st.ax, dy = e.clientY;
   const dd = Math.hypot(dx, dy);
-  const lim = Math.min(dd, st.REACH - 18);         // zanjeer ki tarah — is aage nahi khichti
+  const lim = Math.min(dd, st.REACH - 18);
   st.tx = dx / dd * lim; st.ty = dy / dd * lim;
   const eng = dd >= st.ENGAGE;
   if (eng !== st.engaged) { st.engaged = eng; cord.classList.toggle("engaged", eng); }
 });
 
-function release() {
-  if (!st.dragging) return;
-  st.dragging = false;
-  lastPointerUp = performance.now();
-  if (st.engaged) flipTheme();                     // sirf sahi kheench par flip — tap se nahi
-  cord.classList.remove("engaged");
-  st.engaged = false;
-}
 cord.addEventListener("pointerup", release);
 cord.addEventListener("pointercancel", release);
 
-// pointer ke turant baad wale synthetic clicks swallow; keyboard (Enter/Space) hi toggle kare
+/* safety nets — upar se release, window se bahar, tab switch, lost capture */
+addEventListener("pointerup", release, true);
+addEventListener("pointercancel", release, true);
+addEventListener("blur", release);
+document.addEventListener("visibilitychange", () => { if (document.hidden) release(); });
+cord.addEventListener("contextmenu", (e) => e.preventDefault());
+
+/* keyboard (Enter/Space) — pointer wale clicks swallowed rehte hain */
 cord.addEventListener("click", () => {
   if (performance.now() - lastPointerUp < 500) return;
   flipTheme();
-  st.vx += (st.kx >= 0 ? -1 : 1) * 160;            // chhota jhatka feedback
+  st.vx += (st.kx >= 0 ? -1 : 1) * 150;
 });
 
 // ===== IQTag logo motion — vector-crisp mark, Thanos-snap loader + hero embers =====
