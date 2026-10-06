@@ -124,9 +124,9 @@
     position: fixed; z-index: 0; pointer-events: none;
     border-radius: 50%; filter: blur(120px); opacity: 0.35;
   }
-  .bg-glow.g1 { width: 480px; height: 480px; top: -140px; left: -120px; background: #1e3a8a; }
-  .bg-glow.g2 { width: 420px; height: 420px; top: 30%; right: -160px; background: #6d28d9; }
-  .bg-glow.g3 { width: 380px; height: 380px; bottom: -120px; left: 30%; background: #0e7490; }
+  .bg-glow.g1 { width: 480px; height: 480px; top: -140px; left: -120px; background: #f3ddba; }
+  .bg-glow.g2 { width: 420px; height: 420px; top: 30%; right: -160px; background: #f2cdb2; }
+  .bg-glow.g3 { width: 380px; height: 380px; bottom: -120px; left: 30%; background: #e9e2cf; }
 
   #cursor-glow {
     position: fixed; z-index: 1; pointer-events: none;
@@ -145,7 +145,7 @@
     border-bottom: 1px solid transparent;
   }
   header.nav.scrolled {
-    background: rgba(6, 6, 15, 0.72);
+    background: rgba(250, 246, 236, 0.85);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     border-bottom-color: var(--card-border);
@@ -203,7 +203,7 @@
   }
   .btn:active { transform: scale(0.97); }
   .btn-primary {
-    color: #08081a;
+    color: #fdf8ef;
     background: var(--grad);
     background-size: 180% 100%;
     box-shadow: 0 8px 28px rgba(194, 65, 12, 0.35);
@@ -259,8 +259,8 @@
     will-change: transform;
   }
   .hero h1 .main {
-    color: #f4f6ff;
-    text-shadow: 0 0 40px rgba(148, 163, 255, 0.4);
+    color: #26211a;
+    text-shadow: 0 0 40px rgba(194, 65, 12, 0.22);
     margin-right: -0.14em; /* tracking ka trailing gap cancel — .online name se chipkega */
   }
   .hero h1 .tld {
@@ -490,7 +490,7 @@
 
   .score-ring-wrap { position: relative; width: 150px; height: 150px; margin: 0 auto 20px; }
   .score-ring-wrap svg { transform: rotate(-90deg); }
-  .score-ring-wrap .track { stroke: rgba(255, 255, 255, 0.08); }
+  .score-ring-wrap .track { stroke: rgba(120, 96, 60, 0.2); }
   .score-ring-wrap .bar {
     stroke: url(#ringGrad); stroke-linecap: round;
     transition: stroke-dashoffset 1.2s cubic-bezier(0.22, 1, 0.36, 1);
@@ -565,20 +565,20 @@
   .mock-app { flex-direction: column; gap: 12px; }
   .app-icon {
     width: 88px; height: 88px; border-radius: 23px;
-    background: #0c0c1d; border: 1px solid rgba(255, 255, 255, 0.12);
+    background: #fffdf7; border: 1px solid var(--card-border);
     display: flex; align-items: center; justify-content: center;
     box-shadow: 0 14px 34px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
   }
   .app-label { font-family: var(--font-mono); color: var(--text); font-weight: 600; font-size: 0.82rem; }
 
-  .mock-browser { width: 100%; background: rgba(255, 255, 255, 0.04); border: 1px solid var(--card-border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
+  .mock-browser { width: 100%; background: #fffdf7; border: 1px solid var(--card-border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
   .browser-chrome { display: flex; align-items: center; gap: 6px; padding: 9px 12px 0; background: rgba(255, 255, 255, 0.7); }
   .browser-chrome .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex: 0 0 9px; }
   .dot.r { background: #ff5f57; } .dot.y { background: #febc2e; } .dot.g { background: #28c840; }
   .browser-chrome .tab {
     margin-left: 10px; display: inline-flex; align-items: center; gap: 6px;
     font-size: 0.72rem; color: var(--text);
-    background: rgba(255, 255, 255, 0.08); border: 1px solid var(--card-border); border-bottom: none;
+    background: rgba(255, 255, 255, 0.65); border: 1px solid var(--card-border); border-bottom: none;
     padding: 5px 14px; border-radius: 9px 9px 0 0;
   }
   .browser-url { padding: 12px 16px; font-size: 0.78rem; color: var(--muted); font-family: var(--font-mono); letter-spacing: 0.02em; border-top: 1px solid var(--card-border); }
@@ -675,7 +675,7 @@
   footer .foot-mark { display: block; margin: 0 auto 12px; filter: drop-shadow(0 0 10px rgba(194, 65, 12, 0.35)); }
   footer .foot-name {
     font-family: var(--font-brand);
-    font-weight: 500; color: #f4f6ff; font-size: 0.95rem;
+    font-weight: 500; color: #26211a; font-size: 0.95rem;
     letter-spacing: 0.26em; text-transform: uppercase;
   }
   footer .foot-name .main { margin-right: -0.14em; }
@@ -780,14 +780,14 @@
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <defs>
     <linearGradient id="iqtag-grad" x1="35" y1="61" x2="61" y2="30" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#22d3ee"/>
-      <stop offset=".45" stop-color="#818cf8"/>
-      <stop offset=".9" stop-color="#e879f9"/>
+      <stop offset="0" stop-color="#e0701c"/>
+      <stop offset=".45" stop-color="#c2410c"/>
+      <stop offset=".9" stop-color="#9a3412"/>
     </linearGradient>
     <g id="iqtag-mark">
-      <rect x="3" y="3" width="26" height="26" rx="7" fill="#ffffff"/>
-      <rect x="35" y="3" width="26" height="26" rx="7" fill="#f4f6ff" opacity=".95"/>
-      <rect x="3" y="35" width="26" height="26" rx="7" fill="#f4f6ff" opacity=".88"/>
+      <rect x="3" y="3" width="26" height="26" rx="7" fill="#26211a"/>
+      <rect x="35" y="3" width="26" height="26" rx="7" fill="#26211a" opacity=".95"/>
+      <rect x="3" y="35" width="26" height="26" rx="7" fill="#26211a" opacity=".88"/>
       <g fill="url(#iqtag-grad)">
         <rect x="35" y="53" width="8" height="8" rx="2.2"/>
         <rect x="44" y="53" width="8" height="8" rx="2.2"/>
@@ -918,8 +918,8 @@
               <svg width="150" height="150" viewBox="0 0 150 150">
                 <defs>
                   <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#22d3ee"/>
-                    <stop offset="100%" stop-color="#e879f9"/>
+                    <stop offset="0%" stop-color="#e0701c"/>
+                    <stop offset="100%" stop-color="#9a3412"/>
                   </linearGradient>
                 </defs>
                 <circle class="track" cx="75" cy="75" r="64" fill="none" stroke-width="9"/>
@@ -1279,7 +1279,7 @@ if (finePointer && !reduceMotion) {
 
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = "rgba(165, 180, 252, 0.55)";
+      ctx.fillStyle = "rgba(150, 112, 66, 0.5)";
       ctx.fill();
     }
     for (let i = 0; i < pts.length; i++) {
@@ -1782,7 +1782,7 @@ function confettiBurst() {
   canvas.style.width = w + "px"; canvas.style.height = h + "px";
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-  const colors = ["#22d3ee", "#818cf8", "#e879f9", "#34d399", "#fbbf24"];
+  const colors = ["#c2410c", "#d97706", "#0f766e", "#059669", "#f59e0b"];
   const parts = Array.from({ length: 140 }, () => ({
     x: w / 2 + (Math.random() - 0.5) * 220,
     y: h * 0.4,
@@ -1886,9 +1886,9 @@ $("#whatsapp-btn").addEventListener("click", () => {
 
   // Mark geometry in 64-space: [x, y, w, h, r, color, alpha] — color null = brand gradient
   const SHAPES = [
-    [3, 3, 26, 26, 7, [255, 255, 255], 1],
-    [35, 3, 26, 26, 7, [244, 246, 255], 0.95],
-    [3, 35, 26, 26, 7, [244, 246, 255], 0.88],
+    [3, 3, 26, 26, 7, [38, 33, 26], 1],
+    [35, 3, 26, 26, 7, [38, 33, 26], 0.95],
+    [3, 35, 26, 26, 7, [38, 33, 26], 0.88],
     [35, 53, 8, 8, 2.2, null, 1],
     [44, 53, 8, 8, 2.2, null, 1],
     [53, 53, 8, 8, 2.2, null, 1],
@@ -1902,7 +1902,7 @@ $("#whatsapp-btn").addEventListener("click", () => {
     [51, 28.5, 2.5, 2.5, 0.8, null, 0.25],
     [59.5, 25, 2, 2, 0.7, null, 0.18],
   ];
-  const STOPS = [[0, 34, 211, 238], [0.45, 129, 140, 248], [0.9, 232, 121, 249]];
+  const STOPS = [[0, 224, 112, 28], [0.45, 194, 65, 12], [0.9, 154, 52, 18]];
   const GX = 35, GY = 61, GD = 26, GE = -29, GLEN = GD * GD + GE * GE; // gradient axis (35,61)→(61,30)
 
   function gradAt(x, y) {
@@ -1915,7 +1915,7 @@ $("#whatsapp-btn").addEventListener("click", () => {
   }
 
   const rgb = (c) => `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})`;
-  const DUST = [226, 200, 158];
+  const DUST = [150, 116, 80];
   const dustColor = (c, k) => rgb([c[0] + (DUST[0] - c[0]) * k, c[1] + (DUST[1] - c[1]) * k, c[2] + (DUST[2] - c[2]) * k]);
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
   const easeOutCubic = (p) => 1 - Math.pow(1 - p, 3);
@@ -1926,9 +1926,9 @@ $("#whatsapp-btn").addEventListener("click", () => {
     ctx.translate(lx, ly);
     ctx.scale(ls / 64, ls / 64);
     const g = ctx.createLinearGradient(GX, GY, GX + GD, GY + GE);
-    g.addColorStop(0, "#22d3ee");
-    g.addColorStop(0.45, "#818cf8");
-    g.addColorStop(0.9, "#e879f9");
+    g.addColorStop(0, "#e0701c");
+    g.addColorStop(0.45, "#c2410c");
+    g.addColorStop(0.9, "#9a3412");
     for (const [x, y, w, h, r, color, alpha] of SHAPES) {
       ctx.beginPath();
       if (ctx.roundRect) ctx.roundRect(x, y, w, h, r); else ctx.rect(x, y, w, h);
@@ -2071,8 +2071,8 @@ $("#whatsapp-btn").addEventListener("click", () => {
           const fk = ts / 0.3; // snap flash
           if (fk < 1) {
             const fg = ctx.createRadialGradient(CW / 2 + 30, CH / 2 - 20, 2, CW / 2 + 30, CH / 2 - 20, 26 + 80 * fk);
-            fg.addColorStop(0, `rgba(200,210,255,${0.3 * (1 - fk)})`);
-            fg.addColorStop(1, "rgba(200,210,255,0)");
+            fg.addColorStop(0, `rgba(194,65,12,${0.22 * (1 - fk)})`);
+            fg.addColorStop(1, "rgba(194,65,12,0)");
             ctx.fillStyle = fg;
             ctx.fillRect(0, 0, CW, CH);
           }
