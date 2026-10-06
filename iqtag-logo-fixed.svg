@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!-- app icon background -->
+  <rect x="0" y="0" width="1024" height="1024" rx="230" fill="#0D0D16"/>
+
+  <!-- big tiles: equal size, equal gaps -->
+  <rect x="190" y="190" width="290" height="290" rx="82" fill="#FFFFFF"/>
+  <rect x="544" y="190" width="290" height="290" rx="82" fill="#E9E9F3"/>
+  <rect x="190" y="544" width="290" height="290" rx="82" fill="#D9D9E5"/>
+
+  <!-- 3x3 pixel grid, bottom-right: cyan (bottom-left) to purple (top-right) -->
+  <rect x="544" y="544" width="86" height="86" rx="24" fill="#8E8AF0"/>
+  <rect x="646" y="544" width="86" height="86" rx="24" fill="#7F6BE6"/>
+  <rect x="748" y="544" width="86" height="86" rx="24" fill="#9157DE"/>
+
+  <rect x="544" y="646" width="86" height="86" rx="24" fill="#6E9CF0"/>
+  <rect x="646" y="646" width="86" height="86" rx="24" fill="#7C7DEA"/>
+  <rect x="748" y="646" width="86" height="86" rx="24" fill="#8A62E0"/>
+
+  <rect x="544" y="748" width="86" height="86" rx="24" fill="#58C5E6"/>
+  <rect x="646" y="748" width="86" height="86" rx="24" fill="#56A7EE"/>
+  <rect x="748" y="748" width="86" height="86" rx="24" fill="#6C86F0"/>
+
+  <!-- pixel dissolve: three squares fading up the 45-degree diagonal from the grid corner -->
+  <rect x="847" y="505" width="26" height="26" rx="7"  fill="#9C58E0" opacity="0.95"/>
+  <rect x="901" y="459" width="17" height="17" rx="5"  fill="#9C58E0" opacity="0.55"/>
+  <rect x="954" y="412" width="11" height="11" rx="3"  fill="#9C58E0" opacity="0.30"/>
+</svg>
