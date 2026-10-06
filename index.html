@@ -216,48 +216,49 @@
     max-width: 1100px; margin: 0 auto; padding: 14px 88px 14px 24px;
     display: flex; align-items: center; justify-content: space-between; gap: 16px;
   }
-  /* ---------- theme pull-cord — the lamp rope ---------- */
+  /* ---------- theme pull-cord — asli rassi (physics rope) ---------- */
   .pull-cord {
     position: fixed; top: 0; right: 26px; z-index: 60;
-    width: 58px; height: 138px;
+    width: 58px; height: 150px;
     background: none; border: none; padding: 0;
     cursor: grab; -webkit-tap-highlight-color: transparent;
-    display: flex; flex-direction: column; align-items: center;
-    transform-origin: top center;
-    animation: cord-sway 5.4s ease-in-out infinite;
     outline-offset: 4px;
     touch-action: none; user-select: none; -webkit-user-select: none;
+    overflow: visible;
   }
   .pull-cord:active { cursor: grabbing; }
   .pull-cord:focus-visible { outline: 2px dashed var(--c2); border-radius: 8px; }
-  .cord-line {
-    width: 2px; flex: 1; min-height: 40px;
-    background: linear-gradient(180deg, transparent, var(--cord-line) 10%, var(--cord-line));
+  .cord-rope {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    overflow: visible; pointer-events: none;
   }
+  .cord-path {
+    fill: none; stroke: var(--cord-line); stroke-width: 2;
+    stroke-linecap: round;
+    transition: stroke 0.25s ease;
+  }
+  .pull-cord.engaged .cord-path { stroke: var(--c2); }
   .cord-knob {
-    width: 30px; height: 40px; margin-top: -2px;
+    position: absolute; top: 0; left: 50%;
+    width: 30px; height: 40px; margin: -7px 0 0 -15px;
     border-radius: 15px 15px 17px 17px;
     background: var(--surface-solid);
     border: 1.5px solid var(--card-border);
     box-shadow: 0 5px 16px rgba(0, 0, 0, 0.16), inset 0 1px 0 var(--surface-3);
     display: grid; place-items: center;
     color: var(--text);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    will-change: transform;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
   }
-  .cord-knob svg { width: 16px; height: 16px; }
-  .cord-knob .i-moon { display: none; }
-  html.dark .cord-knob .i-sun { display: none; }
-  html.dark .cord-knob .i-moon { display: block; }
-  .pull-cord:hover .cord-knob { transform: translateY(6px); box-shadow: 0 12px 24px rgba(0, 0, 0, 0.22); }
-  .pull-cord.dragging { animation: none; }
-  .pull-cord.dragging .cord-knob { transform: none; }
-  .pull-cord.engaged .cord-line { background: linear-gradient(180deg, transparent, var(--c2) 10%, var(--c2)); }
   .pull-cord.engaged .cord-knob {
     border-color: var(--c2);
     box-shadow: 0 0 0 4px rgba(var(--acc-rgb), 0.18), 0 10px 28px rgba(0, 0, 0, 0.28);
-    transform: scale(1.1);
   }
-  @keyframes cord-sway { 0%, 100% { rotate: 1.7deg; } 50% { rotate: -1.7deg; } }
+  .cord-knob svg { width: 16px; height: 16px; pointer-events: none; }
+  .cord-knob .i-moon { display: none; }
+  html.dark .cord-knob .i-sun { display: none; }
+  html.dark .cord-knob .i-moon { display: block; }
   /* smooth recolor while the cord is pulled */
   html.theming, html.theming body, html.theming * {
     transition: background-color 0.45s ease, color 0.45s ease, border-color 0.45s ease, box-shadow 0.45s ease, background-position 0.45s ease !important;
@@ -873,8 +874,8 @@
     .logo { font-size: 0.68rem; letter-spacing: 0.2em; gap: 7px; }
     .logo .logo-mark { width: 22px; height: 22px; }
     .nav-inner { padding: 12px 52px 12px 16px; }
-    .pull-cord { right: 5px; width: 44px; height: 98px; }
-    .cord-knob { width: 26px; height: 34px; border-radius: 13px 13px 15px 15px; }
+    .pull-cord { right: 5px; width: 44px; height: 118px; }
+    .cord-knob { width: 26px; height: 34px; margin: -6px 0 0 -13px; }
     .cord-knob svg { width: 14px; height: 14px; }
     .btn-sm { padding: 8px 14px; font-size: 0.78rem; }
   }
@@ -933,9 +934,9 @@
   </div>
 </header>
 
-<!-- theme pull-cord — kheencho aur mode badlo -->
-<button class="pull-cord" id="theme-cord" type="button" aria-label="Toggle dark / light mode" title="Kheencho — dark / light">
-  <span class="cord-line" aria-hidden="true"></span>
+<!-- theme pull-cord — asli rassi, pakdo kheencho chhodo -->
+<button class="pull-cord" id="theme-cord" type="button" aria-label="Toggle dark / light mode" title="Rassi kheencho — dark / light">
+  <svg class="cord-rope" aria-hidden="true"><path class="cord-path" d=""/></svg>
   <span class="cord-knob" aria-hidden="true">
     <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M18.8 5.2l-1.6 1.6M6.8 17.2l-1.6 1.6"/></svg>
     <svg class="i-moon" viewBox="0 0 24 24" fill="currentColor"><path d="M20.6 14.2A8.8 8.8 0 0 1 9.8 3.4a.7.7 0 0 0-.9-.9 9.9 9.9 0 1 0 12.6 12.6.7.7 0 0 0-.9-.9z"/></svg>
@@ -2026,21 +2027,34 @@ $("#whatsapp-btn").addEventListener("click", () => {
    THEME PULL-CORD — pakdo, kheencho (kahi bhi, kisi bhi disha me), chhodo
    ===================================================== */
 const cord = $("#theme-cord");
+const ropePath = cord.querySelector(".cord-path");
+const knobEl = cord.querySelector(".cord-knob");
 cord.setAttribute("aria-pressed", String(isDark()));
 
-const MAX_PULL = 110;   // kitni door tak khich sakti hai rassi
-const ENGAGE_AT = 42;   // itni kheench ke baad chhodne par theme badlega
-let drag = null, lastFlip = 0, lastPointerUp = 0;
+/* rope physics — knob is a pendulum bob on a rope of fixed length */
+let lastPointerUp = 0, lastFlip = 0;
+const st = {
+  kx: 0, ky: 110, vx: 0, vy: 0,       // knob offset from the anchor (top-centre)
+  tx: 0, ty: 110,                      // pointer target in button space
+  ax: 0, REST: 110, REACH: 160, ENGAGE: 56,
+  dragging: false, engaged: false,
+  t0: performance.now(), last: performance.now(),
+};
+metrics();
+st.ky = st.REST;
 
-function setRope(deg, stretch, base) {
-  const b = base ?? (drag ? drag.baseH : 0);
-  cord.style.height = stretch > 0.5 && b ? b + stretch + "px" : "";
-  cord.style.transform = deg ? `rotate(${deg.toFixed(2)}deg)` : "";
+function metrics() {
+  const h = cord.clientHeight;
+  st.REST = Math.max(60, h - 34);      // rope length at rest
+  st.REACH = h + 16;                   // hard stretch limit
+  st.ENGAGE = Math.max(40, h * 0.4);   // pull this far to arm the flip
+  if (!st.dragging) { st.kx = 0; st.ky = st.REST; st.vx = 0; st.vy = 0; }
 }
+addEventListener("resize", metrics);
 
 function flipTheme() {
   const now = performance.now();
-  if (now - lastFlip < 300) return;
+  if (now - lastFlip < 400) return;
   lastFlip = now;
   document.documentElement.classList.add("theming");
   document.documentElement.classList.toggle("dark");
@@ -2051,88 +2065,86 @@ function flipTheme() {
   setTimeout(() => document.documentElement.classList.remove("theming"), 650);
 }
 
-// chhodne ke baad — dampened pendulum swing back to rest
-function springBack(deg0, str0, base) {
-  const t0 = performance.now();
-  (function step(now) {
-    const t = (now - t0) / 1000;
-    const decay = Math.exp(-4.2 * t);
-    const w = Math.cos(10 * t);
-    const deg = deg0 * decay * w, str = str0 * decay * Math.abs(w);
-    if (t < 0.9 && (Math.abs(deg) > 0.25 || str > 0.4)) {
-      setRope(deg, str, base);
-      requestAnimationFrame(step);
-    } else {
-      setRope(0, 0);
-      cord.classList.remove("dragging", "engaged");
-    }
-  })(t0);
-}
+/* physics + render loop — gravity, rope constraint, air drag, halki hawa */
+(function loop(now) {
+  requestAnimationFrame(loop);
+  const dt = Math.min(0.032, (now - st.last) / 1000 || 0.016);
+  st.last = now;
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-// simple tap / keyboard — ek chhoti kheench ke feedback ke saath
-function quickTug(base) {
-  const t0 = performance.now();
-  (function step(now) {
-    const t = (now - t0) / 1000;
-    if (t >= 0.5) { setRope(0, 0); return; }
-    const str = t < 0.16 ? (t / 0.16) * 32 : 32 * (1 - (t - 0.16) / 0.34);
-    setRope(0, str, base);
-    requestAnimationFrame(step);
-  })(t0);
-}
+  if (st.dragging) {
+    const k = 1 - Math.exp(-dt / 0.045);          // smooth rubbery chase
+    const nx = st.kx + (st.tx - st.kx) * k;
+    const ny = st.ky + (st.ty - st.ky) * k;
+    st.vx = (nx - st.kx) / dt; st.vy = (ny - st.ky) / dt; // release momentum ke liye
+    st.kx = nx; st.ky = ny;
+  } else {
+    st.vy += 2600 * dt;                            // gravity
+    if (!reduced) st.vx += Math.sin((now - st.t0) * 0.0012) * 30 * dt; // halki hawa — rope zinda lagti hai
+    st.vx *= Math.exp(-1.5 * dt); st.vy *= Math.exp(-0.8 * dt);
+    st.kx += st.vx * dt; st.ky += st.vy * dt;
+    const d = Math.hypot(st.kx, st.ky);
+    if (d > st.REST) {                             // rope sirf itni hi lambi — pendulum constraint
+      const ux = st.kx / d, uy = st.ky / d;
+      st.kx = ux * st.REST; st.ky = uy * st.REST;
+      const radial = st.vx * ux + st.vy * uy;
+      if (radial > 0) { st.vx -= radial * ux; st.vy -= radial * uy; st.vx *= 0.985; st.vy *= 0.985; }
+    }
+    if (st.ky < 12) { st.ky = 12; st.vy = Math.abs(st.vy) * 0.3; } // chhat ke upar nahi
+  }
+
+  /* render — curved rope (sag ke saath) + knob */
+  const AX = cord.clientWidth / 2;
+  const ex = AX + st.kx, ey = 13 + st.ky;
+  const d = Math.hypot(st.kx, st.ky);
+  const sag = st.dragging
+    ? Math.max(0, st.REST - d) * 0.14
+    : (reduced ? 5 : 9 + Math.sin((now - st.t0) * 0.0021) * 2.5);
+  ropePath.setAttribute("d", `M ${AX.toFixed(1)} 0 Q ${((AX + ex) / 2).toFixed(1)} ${(ey / 2 + sag).toFixed(1)} ${ex.toFixed(1)} ${ey.toFixed(1)}`);
+  knobEl.style.transform = `translate(${st.kx.toFixed(1)}px, ${st.ky.toFixed(1)}px)`;
+})(st.last);
 
 cord.addEventListener("pointerdown", (e) => {
-  cord.setPointerCapture(e.pointerId);
-  drag = {
-    sx: e.clientX, sy: e.clientY,            // jahan pakda — khinchai isi se napte hain
-    baseH: cord.offsetHeight, deg: 0, str: 0, tdeg: 0, tstr: 0, sawMove: false,
-    startT: performance.now(), engaged: false,
-  };
-  cord.classList.add("dragging");
+  metrics();
+  try { cord.setPointerCapture(e.pointerId); } catch (err) {} // synthetic/test pointers ke bina bhi chale
+  const r = cord.getBoundingClientRect();
+  st.ax = r.left + r.width / 2;                    // anchor = button ka top-centre
+  st.dragging = true;
+  st.engaged = false;
+  lastPointerUp = performance.now();               // click-guard fresh — kahin se bhi pakdo
   cord.classList.remove("engaged");
-  (function follow() { // rassi pointer ke peeche rubbery ease se chase karti hai
-    if (!drag) return;
-    drag.deg += (drag.tdeg - drag.deg) * 0.35;
-    drag.str += (drag.tstr - drag.str) * 0.35;
-    setRope(drag.deg, drag.str, drag.baseH);
-    requestAnimationFrame(follow);
-  })();
+  const dx = e.clientX - st.ax, dy = e.clientY;    // anchor viewport ke (ax, 0) par hai
+  const dd = Math.hypot(dx, dy) || 1;
+  const lim = Math.min(dd, st.REST);               // rassi pakadte hi taut
+  st.tx = dx / dd * lim; st.ty = dy / dd * lim;
 });
 
 cord.addEventListener("pointermove", (e) => {
-  if (!drag) return;
-  drag.sawMove = true;
-  const dx = e.clientX - drag.sx, dy = e.clientY - drag.sy;
-  drag.tstr = Math.max(0, Math.min(MAX_PULL, dy * 0.85));                       // neeche khincho → rassi lambi
-  drag.tdeg = Math.max(-34, Math.min(34, Math.atan2(dx, drag.baseH + drag.tstr) * 57.3)); // side khincho → jhoolti hai
-  const eng = Math.hypot(dx, dy) >= ENGAGE_AT;
-  if (eng !== drag.engaged) { drag.engaged = eng; cord.classList.toggle("engaged", eng); }
+  if (!st.dragging) return;
+  let dx = e.clientX - st.ax, dy = e.clientY;      // anchor viewport me (ax, 0)
+  const dd = Math.hypot(dx, dy);
+  const lim = Math.min(dd, st.REACH - 18);         // zanjeer ki tarah — is aage nahi khichti
+  st.tx = dx / dd * lim; st.ty = dy / dd * lim;
+  const eng = dd >= st.ENGAGE;
+  if (eng !== st.engaged) { st.engaged = eng; cord.classList.toggle("engaged", eng); }
 });
 
-function endDrag() {
-  if (!drag) return;
-  const { deg, str, engaged, baseH: b, sawMove } = drag;
-  drag = null;
+function release() {
+  if (!st.dragging) return;
+  st.dragging = false;
   lastPointerUp = performance.now();
-  if (engaged || !sawMove) flipTheme();      // threshold paar ya seedha tap
-  if (sawMove) springBack(deg, str, b);
-  else { cord.classList.remove("dragging", "engaged"); quickTug(b); }
+  if (st.engaged) flipTheme();                     // sirf sahi kheench par flip — tap se nahi
+  cord.classList.remove("engaged");
+  st.engaged = false;
 }
-cord.addEventListener("pointerup", endDrag);
-cord.addEventListener("pointercancel", (e) => {
-  if (!drag) return;
-  const { deg, str, baseH: b } = drag;
-  drag = null;
-  lastPointerUp = performance.now();
-  springBack(deg, str, b);
-});
+cord.addEventListener("pointerup", release);
+cord.addEventListener("pointercancel", release);
 
-// pointer interaction ke turant baad wale synthetic clicks swallow —
-// sirf bina pointer wale click (keyboard Enter/Space) hi toggle kare
+// pointer ke turant baad wale synthetic clicks swallow; keyboard (Enter/Space) hi toggle kare
 cord.addEventListener("click", () => {
   if (performance.now() - lastPointerUp < 500) return;
   flipTheme();
-  quickTug(cord.offsetHeight);
+  st.vx += (st.kx >= 0 ? -1 : 1) * 160;            // chhota jhatka feedback
 });
 
 // ===== IQTag logo motion — vector-crisp mark, Thanos-snap loader + hero embers =====
