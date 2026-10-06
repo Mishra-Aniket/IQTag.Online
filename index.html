@@ -161,12 +161,8 @@
   .logo .logo-mark { display: block; filter: drop-shadow(0 0 8px rgba(129, 140, 248, 0.35)); }
   .nav .logo-mark { transition: opacity 0.3s ease, transform 0.3s ease; }
   .nav .logo-mark.swapped-out { opacity: 0; transform: scale(0.4); }
-  .fly-logo {
-    position: fixed; left: 0; top: 0; z-index: 10001; pointer-events: none;
-    will-change: transform;
-    filter: drop-shadow(0 0 10px rgba(129, 140, 248, 0.9)) drop-shadow(0 0 28px rgba(232, 121, 249, 0.5));
-  }
   .fly-trail { position: fixed; inset: 0; z-index: 10000; pointer-events: none; }
+  .logo .main { margin-right: -0.1em; }
   .logo .tld {
     text-transform: lowercase; letter-spacing: 0.06em; font-weight: 400;
     background: var(--grad); background-size: 200% 100%;
@@ -221,6 +217,7 @@
 
   /* ---------- hero ---------- */
   .hero {
+    min-height: 100vh;
     min-height: 100svh;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
     text-align: center; position: relative; padding: 120px 24px 60px;
@@ -260,6 +257,7 @@
     text-transform: uppercase;
     color: #f4f6ff;
     text-shadow: 0 0 40px rgba(148, 163, 255, 0.4);
+    margin-right: -0.12em; /* letter-spacing ka trailing gap cancel — .online name se chipkega */
   }
   .hero h1 .tld {
     display: inline-block; font-size: 0.4em; font-weight: 400;
@@ -673,6 +671,7 @@
     font-weight: 400; color: #f4f6ff; font-size: 0.95rem;
     letter-spacing: 0.14em; text-transform: uppercase;
   }
+  footer .foot-name .main { margin-right: -0.12em; }
   footer .foot-name .tld {
     text-transform: lowercase; letter-spacing: 0.06em;
     background: var(--grad); background-size: 200% 100%;
@@ -741,6 +740,27 @@
     .quiz-card, .offer-shell { padding: 26px 20px; }
   }
 
+  /* ---------- mobile polish ---------- */
+  @media (max-width: 640px) {
+    .hero { padding: 96px 18px 84px; }
+    .hero-mark { width: 64px; height: 64px; margin-bottom: 18px; }
+    .hero-badge { font-size: 0.72rem; padding: 7px 13px; margin-bottom: 20px; }
+    .hero h1 { font-size: clamp(2.1rem, 11.5vw, 3.6rem); letter-spacing: 0.1em; }
+    .hero .copy { font-size: 1.02rem; margin-top: 18px; min-height: 2.6em; }
+    .hero-ctas { margin-top: 26px; gap: 10px; }
+    .hero-ctas .btn { padding: 13px 20px; font-size: 0.9rem; }
+    .hero-meta { margin-top: 24px; gap: 6px 14px; }
+    .hero-meta .sep { display: none; }
+    .scroll-hint { bottom: 16px; }
+  }
+
+  @media (max-width: 400px) {
+    .logo { font-size: 0.78rem; letter-spacing: 0.08em; gap: 8px; }
+    .logo .logo-mark { width: 22px; height: 22px; }
+    .nav-inner { padding: 12px 16px; }
+    .btn-sm { padding: 8px 14px; font-size: 0.78rem; }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
     html { scroll-behavior: auto; }
@@ -787,7 +807,7 @@
 
 <header class="nav" id="nav">
   <div class="nav-inner">
-    <a class="logo" href="#top"><svg class="logo-mark" width="26" height="26" viewBox="0 0 64 64" aria-hidden="true"><use href="#iqtag-mark"/></svg>IQTag<span class="tld">.online</span></a>
+    <a class="logo" href="#top"><svg class="logo-mark" width="26" height="26" viewBox="0 0 64 64" aria-hidden="true"><use href="#iqtag-mark"/></svg><span class="main">IQTag</span><span class="tld">.online</span></a>
     <div class="nav-right">
       <span class="forsale-badge"><span class="dot"></span>For Sale</span>
       <a href="#offer" class="btn btn-primary btn-sm">Make an Offer</a>
@@ -1130,24 +1150,27 @@
 
 <script>
 /* =========================================================
-   👇 APNA CONTACT YAHAN DAALO (site publish karne se pehle) 👇
+   👇 ADD YOUR CONTACT DETAILS HERE (before publishing the site) 👇
    ========================================================= */
 const CONFIG = {
-  email: "youremail@example.com",   // <-- apna email (jahan offers aani chahiye)
-  whatsapp: "",                     // <-- WhatsApp number, country code ke saath. e.g. "919876543210" (khali = button hidden)
-  buyNowPrice: "",                  // <-- fixed price dena ho to e.g. "$1,999" (khali = no buy-now)
+  email: "aniketmishra492@gmail.com",   // <-- your email address (where offers will arrive)
+  whatsapp: "",             // <-- WhatsApp number with country code, e.g. "919876543210" (empty = button hidden)
+  buyNowPrice: "",                  // <-- fixed price, e.g. "$1,999" (empty = no buy-now badge)
 
-  /* AI Quiz — OpenRouter. SECURITY: apni key yahan LOCALLY paste karo push/deploy se pehle,
-     lekin repo me commit mat karo (GitHub push protection block kar dega).
-     Browser code me key visible hoti hai, isliye OpenRouter dashboard me credit LIMIT laga do.
-     Free models use ho rahe hain (:free), 50 requests/day. */
+  /* AI Quiz — 2 modes:
+     1) aiProxy (RECOMMENDED, default): routes through the Netlify function — the key
+        stays safe in the server-side env var (OPENROUTER_KEY) and never reaches the browser.
+        File: netlify/functions/quiz.mjs  |  Set the env var in the Netlify dashboard.
+     2) aiKey: direct browser call — for LOCAL TESTING only.
+        On a public site the key would be visible in view-source; leave it empty in production. */
+  aiProxy: "/.netlify/functions/quiz",
   aiKey: "",
-  aiModels: [                       // order me try hote hain; sab fail ho to classic questions
+  aiModels: [                       // tried in order; if all fail, the classic questions are used
     "inclusionai/ling-3.0-flash-sante:free",
     "nvidia/nemotron-3-super-120b-a12b:free",
     "apodex/apodex-1.1-mini:free",
   ],
-  aiQuestions: 5,                   // kitne AI questions generate hone chahiye
+  aiQuestions: 5,                   // how many AI questions to generate per round
 };
 
 /* ------------------ basic setup ------------------ */
@@ -1171,7 +1194,7 @@ if (CONFIG.email && !CONFIG.email.includes("example.com")) {
 /* WhatsApp button hidden if no number */
 if (!CONFIG.whatsapp) $("#whatsapp-btn").style.display = "none";
 
-/* floating WhatsApp button — CONFIG.whatsapp set hone par dikhta hai */
+/* Floating WhatsApp button — shown once CONFIG.whatsapp is set */
 if (CONFIG.whatsapp) {
   const wa = $("#wa-float");
   wa.href = "https://wa.me/" + CONFIG.whatsapp + "?text=" +
@@ -1343,15 +1366,15 @@ if (finePointer && !reduceMotion) {
   document.querySelectorAll(".reveal").forEach((el, i) => {
     el.style.transitionDelay = (i % 4) * 70 + "ms";
     io.observe(el);
-    if (inView(el)) el.classList.add("visible"); // fail-safe: pehle se screen par hai to turant dikhao
+    if (inView(el)) el.classList.add("visible"); // fail-safe: reveal instantly if already in view
   });
-  // fail-safe sweep: har 800ms in-view elements reveal — keyboard/anchor jumps par bhi content hamesha dikhe
+  // fail-safe sweep: reveal in-view elements every 800ms — content stays visible across keyboard/anchor jumps
   const sweep = setInterval(() => {
     document.querySelectorAll(".reveal:not(.visible)").forEach((el) => {
       if (inView(el)) el.classList.add("visible");
     });
   }, 800);
-  // final guarantee: 12s baad jo bacha, sab reveal — content kabhi permanently hidden nahi rehta
+  // final guarantee: reveal anything left after 12s — content is never permanently hidden
   setTimeout(() => {
     clearInterval(sweep);
     document.querySelectorAll(".reveal:not(.visible)").forEach((el) => el.classList.add("visible"));
@@ -1394,7 +1417,7 @@ $("#copy-domain").addEventListener("click", async () => {
    QUIZ ENGINE — "The IQ Spark" (AI-powered via OpenRouter)
    ===================================================== */
 
-/* Classic fallback pool — AI na chale to yahan se random 5 aate hain */
+/* Classic fallback pool — if the AI is unavailable, 5 random questions come from here */
 const STATIC_POOL = [
   { q: "Complete the sequence: 2, 4, 8, 16, ?", options: ["24", "32", "30", "20"], answer: 1, tag: "🔢 Sequence" },
   { q: "Which number does not belong? 3, 5, 7, 9, 11", options: ["3", "7", "9", "11"], answer: 2, tag: "🎯 Odd One Out" },
@@ -1494,38 +1517,57 @@ function localQuestions(n) {
 }
 
 async function callOpenRouter(model, messages, maxTokens, timeoutMs) {
-  const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer " + CONFIG.aiKey,
-      "HTTP-Referer": (location && location.origin && location.origin !== "null") ? location.origin : "https://iqtag.online",
-      "X-Title": "IQTag.online IQ Spark",
-    },
-    body: JSON.stringify({ model, messages, temperature: 1.15, max_tokens: maxTokens }),
-    signal: AbortSignal.timeout(timeoutMs),
-  });
+  let res;
+  if (CONFIG.aiProxy) {
+    /* secure mode — the key stays on the server (Netlify function); the model chain runs there too */
+    res = await fetch(CONFIG.aiProxy, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages, max_tokens: maxTokens, models: CONFIG.aiModels }),
+      signal: AbortSignal.timeout(timeoutMs),
+    });
+  } else {
+    /* direct mode — local testing only (the key would be visible in the browser) */
+    res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + CONFIG.aiKey,
+        "HTTP-Referer": (location && location.origin && location.origin !== "null") ? location.origin : "https://iqtag.online",
+        "X-Title": "IQTag.online IQ Spark",
+      },
+      body: JSON.stringify({ model, messages, temperature: 1.15, max_tokens: maxTokens }),
+      signal: AbortSignal.timeout(timeoutMs),
+    });
+  }
   if (!res.ok) throw new Error("HTTP " + res.status);
   const data = await res.json();
+  if (CONFIG.aiProxy) return (data && data.content) || "";
   return (data && data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) || "";
 }
 
+function finishQuestionSet(qs, n) {
+  while (qs.length < n) qs.push(localQuestions(1)[0]); // partial set bhi chalega
+  return qs.map(shuffleOptions);
+}
+
 async function aiGenerateQuestions(n) {
+  const messages = [
+    { role: "system", content: "You are a world-class puzzle setter for a 60-second IQ challenge. You output strict JSON only — no markdown, no commentary." },
+    { role: "user", content: aiPrompt(n) },
+  ];
+  if (CONFIG.aiProxy) {
+    /* the proxy tries the whole model chain itself — a single call is enough */
+    try {
+      const qs = parseQuestions(await callOpenRouter(null, messages, 3000, 48000));
+      if (qs.length >= 3) return finishQuestionSet(qs, n);
+    } catch (e) { /* fall through to classic */ }
+    return null;
+  }
   for (const model of CONFIG.aiModels) {
     try {
-      const content = await callOpenRouter(model, [
-        { role: "system", content: "You are a world-class puzzle setter for a 60-second IQ challenge. You output strict JSON only — no markdown, no commentary." },
-        { role: "user", content: aiPrompt(n) },
-      ], 3000, 22000);
-      const qs = parseQuestions(content);
-      if (qs.length >= n) return qs.map(shuffleOptions);
-      if (qs.length >= 3) { // partial set bhi chalega
-        while (qs.length < n) {
-          const pick = localQuestions(1)[0];
-          qs.push(pick);
-        }
-        return qs.map(shuffleOptions);
-      }
+      const qs = parseQuestions(await callOpenRouter(model, messages, 3000, 22000));
+      if (qs.length >= 3) return finishQuestionSet(qs, n);
     } catch (e) { /* next model */ }
   }
   return null;
@@ -1541,7 +1583,7 @@ async function startQuiz() {
   roundId++;
   showScreen("loading");
   let qs = null;
-  if (CONFIG.aiKey) {
+  if (CONFIG.aiKey || CONFIG.aiProxy) {
     qs = await aiGenerateQuestions(CONFIG.aiQuestions || 5);
   }
   if (qs && qs.length) {
@@ -1684,12 +1726,12 @@ function showResult() {
   aiVerdict(tier.text, roundId);
 }
 
-/* AI ki witty one-line verdict — chupke se aati hai, fail ho to static text rehta hai */
+/* AI witty one-line verdict — loads quietly; falls back to static text on failure */
 async function aiVerdict(fallbackText, rId) {
-  if (!CONFIG.aiKey) return;
+  if (!CONFIG.aiKey && !CONFIG.aiProxy) return;
   try {
     const content = await callOpenRouter(
-      CONFIG.aiModels[0],
+      CONFIG.aiProxy ? null : CONFIG.aiModels[0],
       [{
         role: "user",
         content:
@@ -1699,7 +1741,7 @@ async function aiVerdict(fallbackText, rId) {
       }],
       1200, 18000,
     );
-    if (rId !== roundId) return; // user ne beech me retry kar diya
+    if (rId !== roundId) return; // the user retried mid-round
     const el = $("#result-text");
     const line = (content || "").trim().replace(/^["'\s]+|["'\s]+$/g, "");
     if (line && line.length <= 160 && !line.startsWith("{") && !line.startsWith("[")) {
@@ -2039,7 +2081,7 @@ $("#whatsapp-btn").addEventListener("click", () => {
   })();
 
   // ---- Hero mark: flies in from the nav logo, lands, then breathes pixel-embers ----
-  const heroState = { ready: false, landAt: 0, burst: [], cx: 0, cy: 0 };
+  const heroState = { ready: false, landAt: 0, ringAt: 0, cx: 0, cy: 0 };
   (() => {
     const canvas = document.getElementById("hero-logo");
     if (!canvas) return;
@@ -2053,6 +2095,11 @@ $("#whatsapp-btn").addEventListener("click", () => {
     heroState.cy = LY + LS / 2;
 
     const TILES = SHAPES.filter((s) => !s[5]); // gradient tiles = ember spawn zone
+    const ASSEM = 0.7; // landing assemble duration
+    const heroParts = makeParticles(2.4).map((p) => { // the mark's own dust, for the landing assemble
+      const a = Math.random() * Math.PI * 2, r = 18 + Math.random() * 46;
+      return Object.assign(p, { rst: Math.random() * 0.28, ox: Math.cos(a) * r, oy: Math.sin(a) * r });
+    });
     let embers = [], prev = 0;
 
     function spawnEmber() {
@@ -2076,18 +2123,8 @@ $("#whatsapp-btn").addEventListener("click", () => {
       heroState.ready = true;
       heroState.landAt = performance.now();
       heroState.ringAt = heroState.landAt;
-      if (reduced) return;
-      for (let i = 0; i < 44; i++) { // landing burst
-        const a = Math.random() * Math.PI * 2, sp = 18 + Math.random() * 42;
-        heroState.burst.push({
-          x: heroState.cx, y: heroState.cy,
-          vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 10,
-          s: 1.2 + Math.random() * 1.8,
-          c: gradAt(38 + Math.random() * 22, 28 + Math.random() * 32),
-          life: 0.5 + Math.random() * 0.45, age: 0,
-        });
-      }
     };
+    heroState.leave = () => { heroState.ready = false; }; // the mark flies elsewhere
     if (reduced) heroState.land(); // no motion → show the mark immediately
 
     function frame(now) {
@@ -2100,11 +2137,22 @@ $("#whatsapp-btn").addEventListener("click", () => {
       const t = (now - heroState.landAt) / 1000;
 
       ctx.clearRect(0, 0, CW, CH);
-      drawGlow(ctx, heroState.cx, heroState.cy, 70, Math.min(1, t / 0.3));
+      drawGlow(ctx, heroState.cx, heroState.cy, 70, Math.min(1, t / ASSEM));
       ctx.save();
       ctx.translate(0, Math.sin(t * 1.4) * 2.2);
-      const pop = easeOutCubic(Math.min(1, t / 0.3)); // soft settle-in on landing
-      drawMark(ctx, LX + LS * 0.04 * (1 - pop), LY + LS * 0.04 * (1 - pop), LS * (0.92 + 0.08 * pop));
+      if (!reduced && t < ASSEM) {
+        // Thanos landing: the mark assembles out of converging dust
+        for (const p of heroParts) {
+          const e = easeOutCubic(clamp((t - p.rst) / 0.42, 0, 1));
+          if (e <= 0.01) continue;
+          const s = p.size * K * (0.6 + 0.4 * e);
+          ctx.globalAlpha = p.a0 * e;
+          ctx.fillStyle = dustColor(p.c, (1 - e) * 0.45);
+          ctx.fillRect((p.x + p.ox * (1 - e)) * K + LX - s / 2, (p.y + p.oy * (1 - e)) * K + LY - s / 2, s, s);
+        }
+      } else {
+        drawMark(ctx, LX, LY, LS);
+      }
       ctx.restore();
 
       if (!reduced) {
@@ -2115,7 +2163,7 @@ $("#whatsapp-btn").addEventListener("click", () => {
           ctx.globalAlpha = alpha;
           ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
         };
-        if (t > 0.6 && Math.random() < 0.09 && embers.length < 45) spawnEmber();
+        if (t > ASSEM * 0.8 && Math.random() < 0.09 && embers.length < 45) spawnEmber();
         for (let i = embers.length - 1; i >= 0; i--) {
           const e = embers[i];
           e.age += dt;
@@ -2130,16 +2178,6 @@ $("#whatsapp-btn").addEventListener("click", () => {
             dustColor(e.c, lf * 0.5),
             Math.pow(1 - lf, 1.2) * 0.85
           );
-        }
-        for (let i = heroState.burst.length - 1; i >= 0; i--) {
-          const b = heroState.burst[i];
-          b.age += dt;
-          if (b.age >= b.life) { heroState.burst.splice(i, 1); continue; }
-          b.x += b.vx * dt;
-          b.y += b.vy * dt;
-          b.vy += 10 * dt;
-          const lf = b.age / b.life;
-          dot(b.x, b.y, b.s * K * (1 - 0.4 * lf), dustColor(b.c, lf * 0.5), Math.pow(1 - lf, 1.3) * 0.9);
         }
         // landing shockwave rings
         const rp = (now - heroState.ringAt) / 700;
@@ -2157,16 +2195,17 @@ $("#whatsapp-btn").addEventListener("click", () => {
     requestAnimationFrame(frame);
   })();
 
-  // ---- Entrance: nav logo swaps out and flies down into the hero slot ----
+  // ---- Logo swap controller: the mark snaps to dust, the dust arcs across, and rebuilds itself ----
   (() => {
-    if (heroState.ready) return; // reduced-motion already placed the mark
     const navMark = document.querySelector(".nav .logo-mark");
     const heroCanvas = document.getElementById("hero-logo");
-    if (!navMark || !heroCanvas) { heroState.land(); return; }
-    const DUR = 1650;
-    let flyer = null, trail = null, tctx = null;
-    let sx = 0, sy = 0, ex = 0, ey = 0, cxp = 0, cyp = 0;
-    let dust = [], prev = 0, t0 = 0, shattered = false;
+    if (!navMark || !heroCanvas) return;
+
+    const swap = { at: "nav", flying: false };
+    const DUR = 1700;
+    let trail = null, tctx = null, dust = [], morph = [], raf = 0, cfgCur = null;
+    let p0x = 0, p0y = 0, p1x = 0, p1y = 0, s0 = 26, s1 = 60, cxp = 0, cyp = 0;
+    let prev = 0, t0 = 0, landed = false;
     const q = (a, c, b, t) => (1 - t) * (1 - t) * a + 2 * (1 - t) * t * c + t * t * b;
     const dot = (x, y, r, color, alpha) => { // soft glowing dot (halo + core)
       tctx.globalAlpha = alpha * 0.35;
@@ -2176,97 +2215,180 @@ $("#whatsapp-btn").addEventListener("click", () => {
       tctx.beginPath(); tctx.arc(x, y, r, 0, Math.PI * 2); tctx.fill();
     };
 
-    function begin() { // measure once the page has settled
-      const n = navMark.getBoundingClientRect();
-      const h = heroCanvas.getBoundingClientRect();
-      if (!n.width || h.top > innerHeight * 0.9 || h.bottom < 0) { heroState.land(); return; } // hero not visible
-      sx = n.left + n.width / 2; sy = n.top + n.height / 2;
-      ex = h.left + heroState.cx; ey = h.top + heroState.cy;
-      cxp = (sx + ex) / 2; cyp = Math.min(sy, ey) - 130; // arc control point
+    // viewport-space grid of mark pixels, `size` px wide, centered at (cx, cy)
+    function markGrid(cx, cy, size, step) {
+      const k = size / 64, out = [];
+      for (const [x, y, w, h, r, color, alpha] of SHAPES) {
+        for (let py = y + step / 2; py < y + h; py += step) {
+          for (let px = x + step / 2; px < x + w; px += step) {
+            if (r) { // skip outside the rounded corners
+              const cxr = Math.max(x + r, Math.min(px, x + w - r));
+              const cyr = Math.max(y + r, Math.min(py, y + h - r));
+              if ((px < x + r || px > x + w - r) && (py < y + r || py > y + h - r) && Math.hypot(px - cxr, py - cyr) > r) continue;
+            }
+            out.push({ x: cx + (px - 32) * k, y: cy + (py - 32) * k, c: color || gradAt(px, py), a: alpha });
+          }
+        }
+      }
+      return out;
+    }
 
-      navMark.classList.add("swapped-out");
+    function shatter(x, y, count) { // snap burst at the source
+      for (let i = 0; i < count; i++) {
+        const a = Math.random() * Math.PI * 2, sp = 20 + Math.random() * 50;
+        dust.push({
+          x, y,
+          vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 14,
+          s: 1.2 + Math.random() * 1.8,
+          c: gradAt(38 + Math.random() * 22, 28 + Math.random() * 32),
+          life: 0.45 + Math.random() * 0.45, age: 0, tw: 0,
+        });
+      }
+    }
 
-      flyer = document.createElement("div");
-    flyer.className = "fly-logo";
-    flyer.innerHTML = `<svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true"><use href="#iqtag-mark"/></svg>`;
-    flyer.style.transform = `translate(${sx - 32}px, ${sy - 32}px) scale(${26 / 64})`;
-    document.body.appendChild(flyer);
+    function fly(cfg) {
+      if (swap.flying) return;
+      swap.flying = true;
+      cfgCur = cfg;
+      p0x = cfg.sx; p0y = cfg.sy; p1x = cfg.ex; p1y = cfg.ey;
+      s0 = cfg.s0; s1 = cfg.s1;
+      cxp = (p0x + p1x) / 2; cyp = Math.min(p0y, p1y) - 130; // arc control point
+      dust = []; morph = []; landed = false;
+      if (!trail) {
+        trail = document.createElement("canvas");
+        trail.className = "fly-trail";
+        trail.width = innerWidth; trail.height = innerHeight; // DPR 1 — soft glow dots, stays cheap
+        trail.style.width = innerWidth + "px"; trail.style.height = innerHeight + "px"; // replaced element — needs explicit CSS size
+        document.body.appendChild(trail);
+        tctx = trail.getContext("2d");
+      }
 
-    trail = document.createElement("canvas");
-    trail.className = "fly-trail";
-    trail.width = innerWidth * DPR; trail.height = innerHeight * DPR;
-    trail.style.width = innerWidth + "px"; trail.style.height = innerHeight + "px"; // replaced element — needs explicit CSS size
-    document.body.appendChild(trail);
-    tctx = trail.getContext("2d");
-    tctx.scale(DPR, DPR);
-
-    t0 = performance.now(); prev = t0;
-      requestAnimationFrame(step);
+      // one grain per mark pixel — the source crumbles into these and rebuilds at the target
+      const src = markGrid(p0x, p0y, s0, 2.6);
+      const dst = markGrid(p1x, p1y, s1, 2.6);
+      const N = Math.max(src.length, dst.length);
+      const oqx = p0x + s0 / 2, oqy = p0y - s0 / 2; // snap wave starts top-right
+      for (let i = 0; i < N; i++) {
+        const s = src[i % src.length], d = dst[i % dst.length];
+        const dn = Math.hypot(s.x - oqx, s.y - oqy) / (s0 * 1.5);
+        morph.push({
+          sx: s.x + (Math.random() - 0.5) * 3, sy: s.y + (Math.random() - 0.5) * 3,
+          dx: d.x + (Math.random() - 0.5) * 3, dy: d.y + (Math.random() - 0.5) * 3,
+          delay: dn * 0.32, // the snap wave sweeps across the mark
+          offx: (Math.random() - 0.5) * 90, offy: (Math.random() - 0.5) * 70 - 20,
+          s: 1.3 + Math.random() * 1.9,
+          c: s.c, a: s.a,
+          tw: Math.random() < 0.25 ? 14 + Math.random() * 20 : 0,
+          wob: Math.random() * Math.PI * 2,
+        });
+      }
+      if (cfg.srcNav) navMark.classList.add("swapped-out");
+      else heroState.leave();
+      shatter(p0x, p0y, cfg.srcNav ? 14 : 24);
+      t0 = performance.now(); prev = t0;
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(step);
     }
 
     function step(now) {
-      const el = now - t0;
       const dt = Math.min(0.05, (now - prev) / 1000);
       prev = now;
-      if (el < 0) { requestAnimationFrame(step); return; } // page settles first
-      const t = Math.min(1, el / DUR);
-      const k = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; // easeInOutCubic
-      const bx = q(sx, cxp, ex, k), by = q(sy, cyp, ey, k);
-      const sc = (26 + 42 * k) / 64; // grows from nav size (26px) to hero size (60px+)
-      flyer.style.transform = `translate(${bx - 32}px, ${by - 32}px) scale(${sc}) rotate(${(k - 0.5) * 8}deg)`;
-
-      if (!shattered) { // the swap moment — the nav mark bursts into dust
-        shattered = true;
-        for (let i = 0; i < 14; i++)
-          dust.push({
-            x: sx + (Math.random() - 0.5) * 16, y: sy + (Math.random() - 0.5) * 16,
-            vx: (Math.random() - 0.5) * 40, vy: (Math.random() - 0.5) * 40 - 12,
-            s: 1.2 + Math.random() * 1.8,
-            c: gradAt(38 + Math.random() * 22, 28 + Math.random() * 32),
-            life: 0.5 + Math.random() * 0.4, age: 0, tw: 0,
-          });
-      }
-      // comet trail: dust lags behind the direction of motion
-      const kb = Math.max(0, k - 0.02);
-      let mdx = bx - q(sx, cxp, ex, kb), mdy = by - q(sy, cyp, ey, kb);
-      const ml = Math.hypot(mdx, mdy) || 1;
-      mdx /= ml; mdy /= ml;
-      for (let i = 0; i < 3; i++)
-        dust.push({
-          x: bx + (Math.random() - 0.5) * 12, y: by + (Math.random() - 0.5) * 12,
-          vx: -mdx * (26 + Math.random() * 44) + (Math.random() - 0.5) * 30,
-          vy: -mdy * (26 + Math.random() * 44) + (Math.random() - 0.5) * 30,
-          s: 1.3 + Math.random() * 2,
-          c: Math.random() < 0.18 ? [255, 255, 255] : gradAt(38 + Math.random() * 22, 28 + Math.random() * 32),
-          life: 0.55 + Math.random() * 0.5, age: 0,
-          tw: Math.random() < 0.3 ? 18 + Math.random() * 22 : 0, // sparkle flicker
-        });
-
+      const t = Math.min(1, (now - t0) / DUR);
       tctx.clearRect(0, 0, innerWidth, innerHeight);
+
+      // the mark travels as dust along the arc
+      for (const p of morph) {
+        const tt = clamp((t - p.delay) / (1 - p.delay), 0, 1);
+        if (tt <= 0) continue; // still part of the solid source mark
+        const e = tt < 0.5 ? 4 * tt * tt * tt : 1 - Math.pow(-2 * tt + 2, 3) / 2;
+        const spread = Math.sin(Math.PI * tt); // grains bunch up at both ends
+        const x = q(p0x, cxp, p1x, e) + p.offx * spread + Math.sin(now / 300 + p.wob) * 2.4 * spread;
+        const y = q(p0y, cyp, p1y, e) + p.offy * spread + Math.cos(now / 260 + p.wob) * 2 * spread;
+        let a = p.a * Math.min(1, tt * 7);
+        if (p.tw) a *= 0.55 + 0.45 * Math.sin(now / 1000 * p.tw * 60 + p.wob);
+        dot(x, y, p.s * (1 - 0.3 * spread), dustColor(p.c, 0.25 + 0.3 * spread), a * 0.9);
+      }
+      // free dust (snap bursts, sparks)
       for (let i = dust.length - 1; i >= 0; i--) {
         const d = dust[i];
         d.age += dt;
         if (d.age >= d.life) { dust.splice(i, 1); continue; }
         d.x += d.vx * dt;
         d.y += d.vy * dt;
-        d.vx *= 1 - 1.6 * dt; d.vy *= 1 - 1.6 * dt; // drag pulls dust into a tail
+        d.vy += 14 * dt;
         const lf = d.age / d.life;
-        let a = Math.pow(1 - lf, 1.3) * 0.85;
-        if (d.tw) a *= 0.55 + 0.45 * Math.sin(d.age * d.tw);
-        dot(d.x, d.y, d.s * (1 - 0.35 * lf), dustColor(d.c, lf * 0.4), a);
+        dot(d.x, d.y, d.s * (1 - 0.4 * lf), dustColor(d.c, lf * 0.5), Math.pow(1 - lf, 1.3) * 0.85);
+      }
+      // snap ring at the source
+      const rs = t / 0.4;
+      if (rs < 1) {
+        tctx.globalAlpha = 1;
+        tctx.lineWidth = 2 * (1 - rs) + 0.4;
+        tctx.strokeStyle = `rgba(129,140,248,${(1 - rs) * 0.5})`;
+        tctx.beginPath(); tctx.arc(p0x, p0y, 6 + rs * (s0 * 1.1), 0, Math.PI * 2); tctx.stroke();
       }
       tctx.globalAlpha = 1;
 
+      if (t >= 1 && !landed) {
+        landed = true;
+        if (cfgCur.onArrive) cfgCur.onArrive();
+      }
       if (t < 1) {
-        requestAnimationFrame(step);
+        raf = requestAnimationFrame(step);
       } else {
-        flyer.remove();
-        heroState.land();
-        setTimeout(() => trail.remove(), 1000);
-        setTimeout(() => navMark.classList.remove("swapped-out"), 450);
+        trail.style.transition = "opacity 0.5s ease";
+        trail.style.opacity = "0";
+        setTimeout(((c) => () => c.remove())(trail), 550);
+        trail = null; tctx = null;
+        swap.flying = false;
+        setTimeout(checkSwap, 80); // a scroll during the flight may have queued a swap
       }
     }
-    setTimeout(begin, 350); // let the page settle, then start the show
+
+    function entrance() {
+      if (reduced || swap.at === "hero") return; // already placed by an early scroll
+      const n = navMark.getBoundingClientRect();
+      const h = heroCanvas.getBoundingClientRect();
+      if (!n.width || h.bottom < 0 || h.top > innerHeight * 0.9) {
+        swap.at = "nav"; // hero isn't on screen — the mark stays in the header
+        return;
+      }
+      fly({
+        sx: n.x, sy: n.y, ex: h.left + heroState.cx, ey: h.top + heroState.cy,
+        s0: n.width, s1: 60, srcNav: true, dstNav: false,
+        onArrive: () => { heroState.land(); swap.at = "hero"; },
+      });
+    }
+
+    function checkSwap() {
+      if (reduced || swap.flying) return;
+      const h = heroCanvas.getBoundingClientRect();
+      const n = navMark.getBoundingClientRect();
+      if (!n.width) return;
+      if (swap.at === "hero" && h.bottom < 140) {
+        // scrolling away — the mark snaps to dust and rebuilds itself in the header
+        swap.at = "nav";
+        fly({
+          sx: h.left + heroState.cx, sy: h.top + heroState.cy,
+          ex: n.left + n.width / 2, ey: n.top + n.height / 2,
+          s0: 60, s1: n.width, srcNav: false, dstNav: true,
+          onArrive: () => navMark.classList.remove("swapped-out"),
+        });
+      } else if (swap.at === "nav" && h.bottom > 260 && h.top < innerHeight) {
+        // back at the hero — the header mark snaps to dust and rebuilds the hero
+        swap.at = "hero";
+        fly({
+          sx: n.left + n.width / 2, sy: n.top + n.height / 2,
+          ex: h.left + heroState.cx, ey: h.top + heroState.cy,
+          s0: n.width, s1: 60, srcNav: true, dstNav: false,
+          onArrive: () => heroState.land(),
+        });
+      }
+    }
+
+    addEventListener("scroll", checkSwap, { passive: true });
+    addEventListener("resize", checkSwap, { passive: true });
+    setTimeout(entrance, 350); // let the page settle, then start the show
   })();
 })();
 </script>
