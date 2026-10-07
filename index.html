@@ -905,6 +905,15 @@
     .btn-sm { padding: 8px 14px; font-size: 0.78rem; }
   }
 
+  /* ---------- mobile performance: expensive compositing kill ---------- */
+  @media (max-width: 820px) {
+    /* backdrop blur = phones par sabse mehngi property — har card par 20px blur scroll jank deta hai */
+    * { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+    /* infinite animated drop-shadow + gradient-text repaint bhi kill */
+    .hero-mark { animation: rise 0.9s ease both; filter: drop-shadow(0 6px 22px rgba(129, 140, 248, 0.30)); }
+    .hero h1 .tld { animation: none; }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
     html { scroll-behavior: auto; }
@@ -1326,6 +1335,8 @@ const CONFIG = {
 /* ------------------ basic setup ------------------ */
 const $ = (s) => document.querySelector(s);
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+let isMobilePerf = window.matchMedia("(max-width: 820px)").matches; // phones par heavy FX off (perf)
+window.addEventListener("resize", () => { isMobilePerf = window.matchMedia("(max-width: 820px)").matches; }, { passive: true });
 
 /* ------------------ theme palettes (canvas + SVG Colors) ------------------ */
 const PALETTES = {
@@ -1421,7 +1432,11 @@ if (finePointer && !reduceMotion) {
     }));
   }
 
+  let tickN = 0;
   function tick() {
+    raf = requestAnimationFrame(tick);
+    tickN++;
+    if (isMobilePerf && (tickN & 1)) return; // phones: ~30fps
     ctx.clearRect(0, 0, w, h);
     const linkDist = Math.min(w, h) < 700 ? 100 : 130;
     for (const p of pts) {
@@ -1438,20 +1453,21 @@ if (finePointer && !reduceMotion) {
       ctx.fillStyle = `rgba(${pal().dots}, 0.5)`;
       ctx.fill();
     }
-    for (let i = 0; i < pts.length; i++) {
-      for (let j = i + 1; j < pts.length; j++) {
-        const a = pts[i], b = pts[j];
-        const d = Math.hypot(a.x - b.x, a.y - b.y);
-        if (d < linkDist) {
-          ctx.beginPath();
-          ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y);
-          ctx.strokeStyle = `rgba(${pal().glow}, ${(0.14 * (1 - d / linkDist)).toFixed(3)})`;
-          ctx.lineWidth = 1;
-          ctx.stroke();
+    if (!isMobilePerf) { // link-lines O(n²) hain — phones par dots-only
+      for (let i = 0; i < pts.length; i++) {
+        for (let j = i + 1; j < pts.length; j++) {
+          const a = pts[i], b = pts[j];
+          const d = Math.hypot(a.x - b.x, a.y - b.y);
+          if (d < linkDist) {
+            ctx.beginPath();
+            ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y);
+            ctx.strokeStyle = `rgba(${pal().glow}, ${(0.14 * (1 - d / linkDist)).toFixed(3)})`;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
         }
       }
     }
-    raf = requestAnimationFrame(tick);
   }
 
   window.addEventListener("resize", resize, { passive: true });
@@ -2007,19 +2023,55 @@ function validateForm() {
   };
 }
 
-$("#offer-form").addEventListener("submit", (e) => {
+$("#offer-form").addEventListener("submit", async (e) => {
   e.preventDefault();
   const data = validateForm();
   if (!data) return;
-  const subject = "Offer for IQTag.online — " + data.amount + " — " + data.name;
   if (!CONFIG.email || CONFIG.email.includes("example.com")) {
     toast("⚠️ Owner: set your email in CONFIG inside index.html");
     return;
   }
-  window.location.href =
-    "mailto:" + CONFIG.email +
-    "?subject=" + encodeURIComponent(subject) +
-    "&body=" + encodeURIComponent(composeOffer(data));
+  const btn = $("#offer-form .btn-primary");
+  const btnHTML = btn ? btn.innerHTML : "";
+  if (btn) { btn.disabled = true; btn.style.opacity = "0.6"; btn.innerHTML = '<span class="btn-label">Sending…</span>'; }
+
+  /* FormSubmit — direct inbox, koi popup nahi. Pehli baar Gmail me activation link aata hai (one-time). */
+  const mailtoFallback = () => {
+    const subject = "Offer for IQTag.online — " + data.amount + " — " + data.name;
+    toast("⚠️ Quick send unavailable — Mail app khul gaya, Send dabao");
+    window.location.href =
+      "mailto:" + CONFIG.email +
+      "?subject=" + encodeURIComponent(subject) +
+      "&body=" + encodeURIComponent(composeOffer(data));
+  };
+
+  try {
+    const res = await fetch("https://formsubmit.co/ajax/" + CONFIG.email, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({
+        _subject: "Offer for IQTag.online — " + data.amount + " — " + data.name,
+        _template: "table",
+        _captcha: "false",
+        Name: data.name,
+        Email: data.email,
+        "Offer (USD)": data.amount,
+        "Intended use": data.intent,
+        Message: data.msg || "(none)",
+      }),
+    });
+    const out = await res.json();
+    if (res.ok && String(out.success) === "true") {
+      toast("✅ Offer sent — I\'ll get back to you shortly.");
+      $("#offer-form").reset();
+    } else {
+      mailtoFallback();
+    }
+  } catch (err) {
+    mailtoFallback();
+  } finally {
+    if (btn) { btn.disabled = false; btn.style.opacity = ""; btn.innerHTML = btnHTML; }
+  }
 });
 
 
@@ -2221,7 +2273,7 @@ cord.addEventListener("click", () => {
   }
 
   /* ---- 2) edge refraction (lensing) — Chrome/Edge, generated displacement maps ---- */
-  if (!CSS.supports("backdrop-filter", "url(#lg)") || reduced) return;
+  if (isMobilePerf || !CSS.supports("backdrop-filter", "url(#lg)") || reduced) return; // displacement maps = mobile GPU killer
   const lensSel = ".why-card, .brand-card, .quiz-card, .offer-shell, details.faq-item, .cord-knob";
   const lensEls = [...document.querySelectorAll(lensSel)];
   if (!lensEls.length) return;
@@ -2510,10 +2562,11 @@ cord.addEventListener("click", () => {
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     const CW = 230, CH = 150, LS = 60, K = LS / 64;
-    canvas.width = CW * DPR; canvas.height = CH * DPR;
+    const HDPR = Math.min(window.devicePixelRatio || 1, isMobilePerf ? 1.5 : 3);
+    canvas.width = CW * HDPR; canvas.height = CH * HDPR;
     canvas.style.width = CW + "px";
     canvas.style.height = CH + "px"; // bina iske DPR-2/3 phones par canvas 300-450px tall dikhta hai
-    ctx.scale(DPR, DPR);
+    ctx.scale(HDPR, HDPR);
     const LX = (CW - LS) / 2, LY = (CH - LS) / 2; // mark centered in the canvas
     heroState.cx = LX + LS / 2;
     heroState.cy = LY + LS / 2;
@@ -2556,10 +2609,15 @@ cord.addEventListener("click", () => {
     });
     if (reduced) heroState.land(); // no motion → show the mark immediately
 
+    let lastDraw = 0, frameTick = 0, offscreen = false;
     function frame(now) {
       requestAnimationFrame(frame);
       if (canvas.offsetParent === null) { prev = now; return; }
       if (!heroState.ready) { ctx.clearRect(0, 0, CW, CH); return; } // logo is still in flight
+      if (++frameTick % 45 === 0) { const r = canvas.getBoundingClientRect(); offscreen = r.bottom < -60 || r.top > innerHeight + 60; }
+      if (offscreen) return; // scrolled away — phone CPU bachao
+      if (isMobilePerf && now - lastDraw < 66) return; // phones: ~15fps idle breathing
+      lastDraw = now;
       if (!prev) prev = now;
       const dt = Math.min(0.05, (now - prev) / 1000);
       prev = now;
@@ -2592,7 +2650,7 @@ cord.addEventListener("click", () => {
           ctx.globalAlpha = alpha;
           ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
         };
-        if (t > ASSEM * 0.8 && Math.random() < 0.09 && embers.length < 45) spawnEmber();
+        if (t > ASSEM * 0.8 && Math.random() < (isMobilePerf ? 0.035 : 0.09) && embers.length < (isMobilePerf ? 12 : 45)) spawnEmber();
         for (let i = embers.length - 1; i >= 0; i--) {
           const e = embers[i];
           e.age += dt;
@@ -2789,8 +2847,12 @@ cord.addEventListener("click", () => {
       });
     }
 
+    let lastSwapCheck = 0;
     function checkSwap() {
       if (reduced || swap.flying) return;
+      const nowMs = performance.now();
+      if (nowMs - lastSwapCheck < 150) return;
+      lastSwapCheck = nowMs;
       const h = heroCanvas.getBoundingClientRect();
       const n = navMark.getBoundingClientRect();
       if (!n.width) return;
