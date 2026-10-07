@@ -2046,7 +2046,8 @@ $("#offer-form").addEventListener("submit", async (e) => {
   };
 
   try {
-    const res = await fetch("https://formsubmit.co/ajax/" + CONFIG.email, {
+    /* random alias — naked email spam bots ke liye safe + repeated activation emails band */
+    const res = await fetch("https://formsubmit.co/ajax/057cf042822882a918776fd2d70d527", {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json" },
       body: JSON.stringify({
