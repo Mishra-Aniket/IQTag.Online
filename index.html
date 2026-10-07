@@ -93,6 +93,8 @@
     --glass-hi: rgba(255, 255, 255, 0.95);
     --glass-ring: rgba(255, 255, 255, 0.45);
     --sheen: rgba(255, 255, 255, 0.55);
+    --btn-grad: linear-gradient(92deg, rgba(224, 112, 28, 0.62), rgba(194, 65, 12, 0.62), rgba(154, 52, 18, 0.62));
+    --btn-edge: rgba(194, 65, 12, 0.45);
     --glass-shadow: 0 12px 40px rgba(60, 48, 30, 0.12), 0 2px 8px rgba(60, 48, 30, 0.05);
     --text: #26211a;
     --muted: #7c705d;
@@ -135,6 +137,8 @@
     --glass-hi: rgba(255, 255, 255, 0.22);
     --glass-ring: rgba(255, 255, 255, 0.09);
     --sheen: rgba(255, 255, 255, 0.06);
+    --btn-grad: linear-gradient(92deg, rgba(34, 211, 238, 0.38), rgba(129, 140, 248, 0.42), rgba(232, 121, 249, 0.38));
+    --btn-edge: rgba(129, 140, 248, 0.5);
     --glass-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
     --text: #eef0ff;
     --muted: #9aa0c3;
@@ -330,11 +334,13 @@
   .btn:active { transform: scale(0.97); }
   .btn-primary {
     color: #fdf8ef;
-    background: var(--grad);
-    background-size: 180% 100%;
-    box-shadow: 0 8px 28px rgba(var(--acc-rgb), 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.45), inset 0 -8px 18px rgba(255, 255, 255, 0.12);
+    background: linear-gradient(115deg, var(--sheen), transparent 45%), var(--btn-grad);
+    border-color: var(--btn-edge);
+    backdrop-filter: blur(20px) saturate(170%);
+    -webkit-backdrop-filter: blur(20px) saturate(170%);
+    box-shadow: 0 8px 28px rgba(var(--acc-rgb), 0.30), inset 0 1px 0 var(--glass-hi), inset 0 0 0 1px var(--glass-ring);
   }
-  .btn-primary:hover { transform: translateY(-2px); background-position: 100% 0; box-shadow: 0 12px 34px rgba(var(--acc-rgb), 0.5); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 34px rgba(var(--acc-rgb), 0.45), inset 0 1px 0 var(--glass-hi), inset 0 0 0 1px var(--glass-ring); }
   .btn-ghost {
     color: var(--text);
     background-color: var(--card);
