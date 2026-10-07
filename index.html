@@ -2278,26 +2278,30 @@ cord.addEventListener("click", () => {
   function buildLens(el) {
     const w = Math.min(el.offsetWidth, 900), h = Math.min(el.offsetHeight, 700);
     if (w < 8 || h < 8) return;
+    /* map — FILTER REGION aligned (Chrome feImage quirk): region = 150% of element */
+    const regX = Math.round(w * 0.25), regY = Math.round(h * 0.25);
+    const regW = Math.round(w * 1.5), regH = Math.round(h * 1.5);
     const cv = document.createElement("canvas");
-    cv.width = w; cv.height = h;
+    cv.width = regW; cv.height = regH;
     const cx = cv.getContext("2d");
-    const img = cx.createImageData(w, h);
+    const img = cx.createImageData(regW, regH);
     const D = img.data;
     const R = Math.min(26, w / 2, h / 2);   // matches the glass corner radius
-    const band = 30;                        // refraction band near edges
+    const band = Math.max(26, Math.min(40, w * 0.09, h * 0.14)); // refraction band
     let i = 0;
-    for (let y = 0; y < h; y++) {
-      for (let x = 0; x < w; x++, i += 4) {
-        const eb = Math.min(x, w - x, y, h - y);        // distance to element edge
-        const t = Math.max(0, 1 - eb / band);
-        const tt = t * t * (3 - 2 * t);                 // smoothstep
+    for (let y = 0; y < regH; y++) {
+      for (let x = 0; x < regW; x++, i += 4) {
+        const ex = x - regX, ey = y - regY;             // element-space coords
+        const eb = Math.min(ex, w - ex, ey, h - ey);    // distance to element edge (negative = bahar)
+        const t = Math.max(0, 1 - Math.abs(eb) / band);
+        const tt = Math.pow(t, 1.7);                    // chamfer profile
         let nx = 0, ny = 0;
         if (t > 0) {
-          const cxx = Math.max(R, Math.min(x, w - R));
-          const cyy = Math.max(R, Math.min(y, h - R));
-          const vx = x - cxx, vy = y - cyy;
+          const cxx = Math.max(R, Math.min(ex, w - R));
+          const cyy = Math.max(R, Math.min(ey, h - R));
+          const vx = ex - cxx, vy = ey - cyy;
           const vl = Math.hypot(vx, vy) || 1;
-          nx = vx / vl; ny = vy / vl;                   // outward normal
+          nx = vx / vl; ny = vy / vl;                   // OUTWARD — edge compression (glows bahar push)
         }
         D[i] = 128 + nx * 127 * tt;
         D[i + 1] = 128 + ny * 127 * tt;
@@ -2312,13 +2316,23 @@ cord.addEventListener("click", () => {
     f.setAttribute("x", "-25%"); f.setAttribute("y", "-25%");
     f.setAttribute("width", "150%"); f.setAttribute("height", "150%");
     f.setAttribute("color-interpolation-filters", "sRGB");
-    f.innerHTML =
-      '<feImage x="0" y="0" width="100%" height="100%" preserveAspectRatio="none" href="' + cv.toDataURL() + '" result="map"/>' +
-      '<feDisplacementMap in="SourceGraphic" in2="map" scale="44" xChannelSelector="R" yChannelSelector="G"/>';
+    const feImage = document.createElementNS(svgNS, "feImage");
+    feImage.setAttribute("x", String(-regX)); feImage.setAttribute("y", String(-regY));
+    feImage.setAttribute("width", String(regW)); feImage.setAttribute("height", String(regH));
+    feImage.setAttribute("preserveAspectRatio", "none");
+    feImage.setAttribute("result", "map");
+    feImage.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", cv.toDataURL());
+    feImage.setAttribute("href", cv.toDataURL());
+    f.appendChild(feImage);
+    const d = document.createElementNS(svgNS, "feDisplacementMap");
+    d.setAttribute("in", "SourceGraphic"); d.setAttribute("in2", "map");
+    d.setAttribute("scale", "46");
+    d.setAttribute("xChannelSelector", "R"); d.setAttribute("yChannelSelector", "G");
+    f.appendChild(d);
     if (el.__lensFid) { const oldF = defs.querySelector("#" + el.__lensFid); if (oldF) oldF.remove(); }
     el.__lensFid = id;
     defs.appendChild(f);
-    el.style.backdropFilter = "blur(13px) saturate(170%) url(#" + id + ")";
+    el.style.backdropFilter = "blur(11px) saturate(180%) brightness(1.04) url(#" + id + ")";
   }
 
   lensEls.forEach(buildLens);
