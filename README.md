@@ -15,11 +15,10 @@ A premium, fully interactive "domain for sale" landing page built for **IQTag.on
 | 🪄 **Logo swap animation** | The logo snaps into dust, arcs between the hero and the header as you scroll, and rebuilds itself at its destination |
 | ⚡ **IQ Spark quiz** | **AI-powered** — 5 fresh questions per round via OpenRouter, points, speed bonus, 🔥 streak bonus, critical-timer pulse, AI verdict, confetti and Share Score. If the AI is unavailable, an 18-question classic pool takes over automatically |
 | 📊 Counters & scroll reveals | Stat counters and sections fade in smoothly |
-| ✉️ Offer form | Send an offer via Email (mailto) or WhatsApp |
+| ✉️ Offer form | Buyers send offers straight to your email (mailto) |
 | 💰 Buy Now price | Optional fixed-price badge |
 | 🧠 **SVG logo** | Original IQTag mark used in the nav, hero, footer and favicon (pixel-dissolve "tag scan" concept) |
 | 🖼️ Brand in Action | App icon, browser tab and phone-screen mockups — buyers see the brand in context |
-| 💬 Floating WhatsApp button | Always-visible chat button in the corner (activates once `CONFIG.whatsapp` is set) |
 | 🔍 SEO schema | JSON-LD structured data (WebSite + Product/Offer + FAQPage) for Google rich results |
 | 📱 Fully responsive | Looks right on mobile, tablet and desktop |
 
@@ -32,7 +31,6 @@ Open `index.html` and find the `CONFIG` block near the bottom of the `<script>`:
 ```js
 const CONFIG = {
   email: "youremail@example.com",   // 👈 your email address (where offers will arrive)
-  whatsapp: "",                     // 👈 e.g. "919876543210" (country code + number; empty = WhatsApp button hidden)
   buyNowPrice: "",                  // 👈 fixed price, e.g. "$1,999" (empty = no buy-now badge)
   aiProxy: "/.netlify/functions/quiz", // 👈 secure AI mode — the key lives in a Netlify env var (see below)
   aiKey: "",                        // 👈 LOCAL TESTING ONLY — leave empty in production
@@ -42,7 +40,6 @@ const CONFIG = {
 ```
 
 - **email** — offers arrive here (the form opens a `mailto:` link).
-- **whatsapp** — setting it activates both the floating WhatsApp button and the form's WhatsApp button.
 - **buyNowPrice** — setting it shows a "Buy It Now" pill under the hero.
 
 ---
@@ -118,7 +115,7 @@ Then open http://localhost:8000
 - `iqtag-logo-fixed.svg` — master logo artwork (1024×1024, dark rounded-square app-icon background)
 - `iqtag-logo-fixed.png` — rendered from the SVG above
 - `iqtag-logo.png` — 1024×1024 logo with a transparent background
-- `iqtag-logo-whatsapp.png` — 1024×1024 logo on a dark rounded square, sized for a WhatsApp profile picture
+- `iqtag-logo-WhatsApp.png` — 1024×1024 logo on a dark rounded square, sized for a WhatsApp profile picture
 
 ---
 
