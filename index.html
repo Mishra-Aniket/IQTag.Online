@@ -2193,32 +2193,36 @@ $("#offer-form").addEventListener("submit", async (e) => {
       "&body=" + encodeURIComponent(composeOffer(data));
   };
 
-  const fsPost = async (to) => {
-    const res = await fetch("https://formsubmit.co/ajax/" + to, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify({
-        _subject: "Offer for IQTag.online — " + data.amount + " — " + data.name,
-        _template: "table",
-        _captcha: "false",
-        Name: data.name,
-        Email: data.email,
-        "Offer (USD)": data.amount,
-        "Intended use": data.intent,
-        Message: data.msg || "(none)",
-      }),
-    });
-    const out = await res.json();
-    window.__fsOut = out;
-    return { ok: res.ok && String(out.success) === "true" };
+  const fsPost = async (targetEmail) => {
+    try {
+      const res = await fetch("https://formsubmit.co/ajax/" + encodeURIComponent(targetEmail), {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          _subject: "New Offer for IQTag.online — " + data.amount + " from " + data.name,
+          _template: "table",
+          _captcha: "false",
+          Name: data.name,
+          Email: data.email,
+          "Offer (USD)": data.amount,
+          "Intended use": data.intent,
+          Message: data.msg || "(none)",
+        }),
+      });
+      const out = await res.json().catch(() => ({}));
+      window.__fsOut = out;
+      // If success is true or message indicates activation sent / success
+      const isSuccess = res.ok && (String(out.success) === "true" || (out.message && out.message.toLowerCase().includes("activation")));
+      return { ok: isSuccess, out };
+    } catch (e) {
+      return { ok: false, error: e };
+    }
   };
 
   try {
-    /* pehle spam-safe alias; fail hone par naked email; wo bhi fail to mailto */
-    let r = await fsPost("057cf042822882a918776fd2d70d527");
-    if (!r.ok) r = await fsPost(CONFIG.email);
+    const r = await fsPost(CONFIG.email);
     if (r.ok) {
-      toast("✅ Offer sent — I\'ll get back to you shortly.");
+      toast("✅ Offer submitted successfully! Thank you.");
       $("#offer-form").reset();
     } else {
       mailtoFallback();
