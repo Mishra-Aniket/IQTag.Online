@@ -330,6 +330,23 @@
     position: relative; overflow: hidden;
   }
   .btn:active { transform: scale(0.97); }
+  /* liquid bubble — press pe squish, release pe jelly bounce (linear() curve) */
+  :root {
+    --liquid: linear(
+      0 0%, 0.6091 3.69%, 1.0259 7.24%, 1.1733 9.05%, 1.283 10.92%,
+      1.3562 12.87%, 1.3948 14.95%, 1.4014 16.03%, 1.3999 17.16%,
+      1.3731 19.64%, 1.3202 22.27%, 1.1394 29.39%, 1.0582 33.17%,
+      0.9943 37.45%, 0.9734 39.64%, 0.9593 41.92%, 0.9505 45.08%,
+      0.9517 48.7%, 0.9924 63.02%, 1.0046 71.2%, 1.0061 78.24%, 1 100%
+    );
+  }
+  .btn-primary, .btn-ghost {
+    transition: transform 0.45s var(--liquid), box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  }
+  .btn-primary:active, .btn-ghost:active {
+    transform: scale(1.07, 0.92);
+    transition: transform 0.08s ease-out;
+  }
   /* primary — reference liquid glass: white frost + bright rim + black chip + ghost text */
   .btn-primary {
     color: #16130e;
@@ -2215,7 +2232,15 @@ function release() {
   const dMain = `M ${AX.toFixed(1)} 0 Q ${mx.toFixed(1)} ${(my + sag).toFixed(1)} ${ex.toFixed(1)} ${ey.toFixed(1)}`;
   ropePath.setAttribute("d", dMain);
   strandPath.setAttribute("d", `M ${AX.toFixed(1)} 0 Q ${(mx + 1.6).toFixed(1)} ${(my + sag - 1.5).toFixed(1)} ${(ex - 0.8).toFixed(1)} ${(ey - 1).toFixed(1)}`);
-  knobEl.style.transform = `translate(${st.kx.toFixed(1)}px, ${st.ky.toFixed(1)}px)`;
+  /* liquid bubble — velocity ke direction me squish, volume preserve */
+  const spd = Math.hypot(st.vx, st.vy);
+  const sq = Math.min(spd / 2800, 0.3);
+  const squishAng = spd > 40 ? Math.atan2(st.vy, st.vx) * 57.3 : 0;
+  knobEl.style.transform =
+    `translate(${st.kx.toFixed(1)}px, ${st.ky.toFixed(1)}px)` +
+    (sq > 0.01
+      ? ` rotate(${squishAng.toFixed(1)}deg) scale(${(1 + sq).toFixed(3)}, ${(1 - sq * 0.72).toFixed(3)}) rotate(${(-squishAng).toFixed(1)}deg)`
+      : "");
 })(st.last);
 
 cord.addEventListener("pointerdown", (e) => {
