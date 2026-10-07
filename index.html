@@ -2038,7 +2038,7 @@ $("#offer-form").addEventListener("submit", async (e) => {
   /* FormSubmit — direct inbox, koi popup nahi. Pehli baar Gmail me activation link aata hai (one-time). */
   const mailtoFallback = () => {
     const subject = "Offer for IQTag.online — " + data.amount + " — " + data.name;
-    toast("⚠️ Quick send unavailable — Mail app khul gaya, Send dabao");
+    toast("⚠️ Quick send unavailable — your Mail app opened, just press Send");
     window.location.href =
       "mailto:" + CONFIG.email +
       "?subject=" + encodeURIComponent(subject) +
@@ -2061,6 +2061,7 @@ $("#offer-form").addEventListener("submit", async (e) => {
       }),
     });
     const out = await res.json();
+    window.__fsOut = out;
     if (res.ok && String(out.success) === "true") {
       toast("✅ Offer sent — I\'ll get back to you shortly.");
       $("#offer-form").reset();
