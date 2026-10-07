@@ -92,6 +92,7 @@
     --card-border: rgba(120, 96, 60, 0.15);
     --glass-hi: rgba(255, 255, 255, 0.95);
     --glass-ring: rgba(255, 255, 255, 0.45);
+    --glare: rgba(255, 255, 255, 0.60);
     --sheen: rgba(255, 255, 255, 0.55);
     --btn-grad: linear-gradient(92deg, rgba(224, 112, 28, 0.62), rgba(194, 65, 12, 0.62), rgba(154, 52, 18, 0.62));
     --btn-edge: rgba(194, 65, 12, 0.45);
@@ -136,6 +137,7 @@
     --card-border: rgba(255, 255, 255, 0.12);
     --glass-hi: rgba(255, 255, 255, 0.22);
     --glass-ring: rgba(255, 255, 255, 0.09);
+    --glare: rgba(255, 255, 255, 0.16);
     --sheen: rgba(255, 255, 255, 0.06);
     --btn-grad: linear-gradient(92deg, rgba(34, 211, 238, 0.38), rgba(129, 140, 248, 0.42), rgba(232, 121, 249, 0.38));
     --btn-edge: rgba(129, 140, 248, 0.5);
@@ -262,7 +264,7 @@
     width: 30px; height: 40px; margin: -7px 0 0 -15px;
     border-radius: 15px 15px 17px 17px;
     background-color: var(--card);
-    background-image: linear-gradient(115deg, var(--sheen), transparent 45%);
+    background-image: radial-gradient(300px circle at var(--hx, 50%) var(--hy, -30%), var(--glare), transparent 62%), linear-gradient(115deg, var(--sheen), transparent 45%);
     backdrop-filter: blur(14px) saturate(160%);
     -webkit-backdrop-filter: blur(14px) saturate(160%);
     border: 1.5px solid var(--card-border);
@@ -334,7 +336,7 @@
   .btn:active { transform: scale(0.97); }
   .btn-primary {
     color: #fdf8ef;
-    background: linear-gradient(115deg, var(--sheen), transparent 45%), var(--btn-grad);
+    background: radial-gradient(300px circle at var(--hx, 50%) var(--hy, -30%), var(--glare), transparent 62%), linear-gradient(115deg, var(--sheen), transparent 45%), var(--btn-grad);
     border-color: var(--btn-edge);
     backdrop-filter: blur(20px) saturate(170%);
     -webkit-backdrop-filter: blur(20px) saturate(170%);
@@ -344,7 +346,7 @@
   .btn-ghost {
     color: var(--text);
     background-color: var(--card);
-    background-image: linear-gradient(115deg, var(--sheen), transparent 45%);
+    background-image: radial-gradient(300px circle at var(--hx, 50%) var(--hy, -30%), var(--glare), transparent 62%), linear-gradient(115deg, var(--sheen), transparent 45%);
     border-color: var(--card-border);
     backdrop-filter: blur(20px) saturate(170%);
     -webkit-backdrop-filter: blur(20px) saturate(170%);
@@ -374,7 +376,7 @@
     font-size: 0.74rem; font-weight: 500; letter-spacing: 0.06em;
     color: var(--muted);
     border: 1px solid var(--card-border); background-color: var(--card);
-    background-image: linear-gradient(115deg, var(--sheen), transparent 45%);
+    background-image: radial-gradient(300px circle at var(--hx, 50%) var(--hy, -30%), var(--glare), transparent 62%), linear-gradient(115deg, var(--sheen), transparent 45%);
     padding: 8px 16px; border-radius: 999px; margin-bottom: 28px;
     backdrop-filter: blur(20px) saturate(170%);
     animation: rise 0.8s ease both;
@@ -461,7 +463,7 @@
     font-family: var(--font-mono);
     font-size: 0.78rem; font-weight: 500; color: var(--muted);
     background-color: var(--card);
-    background-image: linear-gradient(115deg, var(--sheen), transparent 45%); border: 1px solid var(--card-border);
+    background-image: radial-gradient(300px circle at var(--hx, 50%) var(--hy, -30%), var(--glare), transparent 62%), linear-gradient(115deg, var(--sheen), transparent 45%); border: 1px solid var(--card-border);
     padding: 7px 14px; border-radius: 999px;
     backdrop-filter: blur(20px) saturate(170%);
     animation: floaty 6s ease-in-out infinite;
@@ -528,7 +530,7 @@
   .quiz-shell { max-width: 640px; margin: 0 auto; }
   .quiz-card {
     background-color: var(--card);
-    background-image: linear-gradient(115deg, var(--sheen), transparent 45%); border: 1px solid var(--card-border);
+    background-image: radial-gradient(300px circle at var(--hx, 50%) var(--hy, -30%), var(--glare), transparent 62%), linear-gradient(115deg, var(--sheen), transparent 45%); border: 1px solid var(--card-border);
     border-radius: 24px; padding: 36px;
     backdrop-filter: blur(20px) saturate(170%);
     box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-hi), inset 0 0 0 1px var(--glass-ring);
@@ -650,7 +652,7 @@
   @media (max-width: 760px) { .cards-grid { grid-template-columns: 1fr; } }
   .why-card {
     background-color: var(--card);
-    background-image: linear-gradient(115deg, var(--sheen), transparent 45%); border: 1px solid var(--card-border);
+    background-image: radial-gradient(300px circle at var(--hx, 50%) var(--hy, -30%), var(--glare), transparent 62%), linear-gradient(115deg, var(--sheen), transparent 45%); border: 1px solid var(--card-border);
     border-radius: var(--radius); padding: 30px;
     backdrop-filter: blur(20px) saturate(170%);
     -webkit-backdrop-filter: blur(20px) saturate(170%);
@@ -681,7 +683,7 @@
     display: inline-flex; align-items: center; gap: 8px;
     padding: 12px 20px; border-radius: 999px;
     background-color: var(--card);
-    background-image: linear-gradient(115deg, var(--sheen), transparent 45%); border: 1px solid var(--card-border);
+    background-image: radial-gradient(300px circle at var(--hx, 50%) var(--hy, -30%), var(--glare), transparent 62%), linear-gradient(115deg, var(--sheen), transparent 45%); border: 1px solid var(--card-border);
     backdrop-filter: blur(20px) saturate(170%);
     -webkit-backdrop-filter: blur(20px) saturate(170%);
     box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-hi), inset 0 0 0 1px var(--glass-ring);
@@ -700,7 +702,7 @@
   @media (max-width: 860px) { .brand-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; } }
   .brand-card {
     background-color: var(--card);
-    background-image: linear-gradient(115deg, var(--sheen), transparent 45%); border: 1px solid var(--card-border);
+    background-image: radial-gradient(300px circle at var(--hx, 50%) var(--hy, -30%), var(--glare), transparent 62%), linear-gradient(115deg, var(--sheen), transparent 45%); border: 1px solid var(--card-border);
     border-radius: var(--radius); padding: 30px 24px;
     backdrop-filter: blur(20px) saturate(170%);
     -webkit-backdrop-filter: blur(20px) saturate(170%);
@@ -755,7 +757,7 @@
   .offer-shell {
     max-width: 720px; margin: 0 auto;
     background-color: var(--card);
-    background-image: linear-gradient(115deg, var(--sheen), transparent 45%); border: 1px solid var(--card-border);
+    background-image: radial-gradient(300px circle at var(--hx, 50%) var(--hy, -30%), var(--glare), transparent 62%), linear-gradient(115deg, var(--sheen), transparent 45%); border: 1px solid var(--card-border);
     border-radius: 26px; padding: 44px;
     backdrop-filter: blur(20px) saturate(170%);
     -webkit-backdrop-filter: blur(20px) saturate(170%);
@@ -803,7 +805,7 @@
   .faq-list { max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
   details.faq-item {
     background-color: var(--card);
-    background-image: linear-gradient(115deg, var(--sheen), transparent 45%); border: 1px solid var(--card-border);
+    background-image: radial-gradient(300px circle at var(--hx, 50%) var(--hy, -30%), var(--glare), transparent 62%), linear-gradient(115deg, var(--sheen), transparent 45%); border: 1px solid var(--card-border);
     border-radius: 14px; overflow: hidden;
     backdrop-filter: blur(20px) saturate(170%);
     -webkit-backdrop-filter: blur(20px) saturate(170%);
@@ -889,7 +891,7 @@
   .toast {
     position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px);
     background-color: var(--card);
-    background-image: linear-gradient(115deg, var(--sheen), transparent 45%); color: var(--text);
+    background-image: radial-gradient(300px circle at var(--hx, 50%) var(--hy, -30%), var(--glare), transparent 62%), linear-gradient(115deg, var(--sheen), transparent 45%); color: var(--text);
     backdrop-filter: blur(20px) saturate(170%);
     -webkit-backdrop-filter: blur(20px) saturate(170%);
     border: 1px solid var(--card-border); border-radius: 12px;
@@ -983,6 +985,8 @@
     </div>
   </div>
 </header>
+
+<svg id="lg-defs" width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"></svg>
 
 <!-- theme pull-cord — asli rassi, pakdo kheencho chhodo -->
 <button class="pull-cord" id="theme-cord" type="button" aria-label="Toggle dark / light mode" title="Pull the cord — toggle dark / light">
@@ -2223,6 +2227,104 @@ cord.addEventListener("click", () => {
   flipTheme();
   st.vx += (st.kx >= 0 ? -1 : 1) * 150;
 });
+
+/* =====================================================
+   LIQUID GLASS extras — moving glare + edge refraction
+   ===================================================== */
+(() => {
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---- 1) specular glare: pointer ke saath har glass par chamak ---- */
+  const glareSel = ".why-card, .brand-card, .chip, .tag-chip, .hero-badge, .btn-ghost, .btn-primary, .quiz-card, .offer-shell, details.faq-item, .forsale-badge, .cord-knob, .toast";
+  const glareEls = [...document.querySelectorAll(glareSel)].map((el) => ({ el, r: null }));
+  const glareRects = () => { for (const o of glareEls) o.r = o.el.getBoundingClientRect(); };
+  glareRects();
+  let glareScrollQueued = false;
+  addEventListener("scroll", () => {
+    if (glareScrollQueued) return;
+    glareScrollQueued = true;
+    requestAnimationFrame(() => { glareScrollQueued = false; glareRects(); });
+  }, { passive: true });
+  addEventListener("resize", glareRects);
+  setTimeout(glareRects, 1200); // fonts/layout settle
+
+  if (!reduced && glareEls.length) {
+    let lastMove = null, queued = false;
+    addEventListener("pointermove", (e) => {
+      lastMove = e;
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        queued = false;
+        if (!lastMove) return;
+        for (const o of glareEls) {
+          if (!o.r) continue;
+          o.el.style.setProperty("--hx", (lastMove.clientX - o.r.left).toFixed(0) + "px");
+          o.el.style.setProperty("--hy", (lastMove.clientY - o.r.top).toFixed(0) + "px");
+        }
+      });
+    }, { passive: true });
+  }
+
+  /* ---- 2) edge refraction (lensing) — Chrome/Edge, generated displacement maps ---- */
+  if (!CSS.supports("backdrop-filter", "url(#lg)") || reduced) return;
+  const lensSel = ".why-card, .brand-card, .quiz-card, .offer-shell, details.faq-item, .cord-knob";
+  const lensEls = [...document.querySelectorAll(lensSel)];
+  if (!lensEls.length) return;
+  const svgNS = "http://www.w3.org/2000/svg";
+  const defs = document.getElementById("lg-defs");
+  let lensN = 0;
+
+  function buildLens(el) {
+    const w = Math.min(el.offsetWidth, 900), h = Math.min(el.offsetHeight, 700);
+    if (w < 8 || h < 8) return;
+    const cv = document.createElement("canvas");
+    cv.width = w; cv.height = h;
+    const cx = cv.getContext("2d");
+    const img = cx.createImageData(w, h);
+    const D = img.data;
+    const R = Math.min(26, w / 2, h / 2);   // matches the glass corner radius
+    const band = 30;                        // refraction band near edges
+    let i = 0;
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++, i += 4) {
+        const eb = Math.min(x, w - x, y, h - y);        // distance to element edge
+        const t = Math.max(0, 1 - eb / band);
+        const tt = t * t * (3 - 2 * t);                 // smoothstep
+        let nx = 0, ny = 0;
+        if (t > 0) {
+          const cxx = Math.max(R, Math.min(x, w - R));
+          const cyy = Math.max(R, Math.min(y, h - R));
+          const vx = x - cxx, vy = y - cyy;
+          const vl = Math.hypot(vx, vy) || 1;
+          nx = vx / vl; ny = vy / vl;                   // outward normal
+        }
+        D[i] = 128 + nx * 127 * tt;
+        D[i + 1] = 128 + ny * 127 * tt;
+        D[i + 2] = 128;
+        D[i + 3] = 255;
+      }
+    }
+    cx.putImageData(img, 0, 0);
+    const id = "lg-f" + (++lensN);
+    const f = document.createElementNS(svgNS, "filter");
+    f.setAttribute("id", id);
+    f.setAttribute("x", "-25%"); f.setAttribute("y", "-25%");
+    f.setAttribute("width", "150%"); f.setAttribute("height", "150%");
+    f.setAttribute("color-interpolation-filters", "sRGB");
+    f.innerHTML =
+      '<feImage x="0" y="0" width="100%" height="100%" preserveAspectRatio="none" href="' + cv.toDataURL() + '" result="map"/>' +
+      '<feDisplacementMap in="SourceGraphic" in2="map" scale="44" xChannelSelector="R" yChannelSelector="G"/>';
+    if (el.__lensFid) { const oldF = defs.querySelector("#" + el.__lensFid); if (oldF) oldF.remove(); }
+    el.__lensFid = id;
+    defs.appendChild(f);
+    el.style.backdropFilter = "blur(13px) saturate(170%) url(#" + id + ")";
+  }
+
+  lensEls.forEach(buildLens);
+  let rzT;
+  addEventListener("resize", () => { clearTimeout(rzT); rzT = setTimeout(() => lensEls.forEach(buildLens), 250); });
+})();
 
 // ===== IQTag logo motion — vector-crisp mark, Thanos-snap loader + hero embers =====
 (() => {
