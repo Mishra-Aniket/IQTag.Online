@@ -88,10 +88,12 @@
   :root {
     --bg: #f7f2e6;
     --bg-2: #fdfaf2;
-    --card: rgba(255, 255, 255, 0.44);
-    --card-border: rgba(255, 255, 255, 0.65);
-    --glass-hi: rgba(255, 255, 255, 0.92);
-    --glass-shadow: 0 10px 36px rgba(60, 48, 30, 0.10);
+    --card: rgba(255, 255, 255, 0.62);
+    --card-border: rgba(120, 96, 60, 0.15);
+    --glass-hi: rgba(255, 255, 255, 0.95);
+    --glass-ring: rgba(255, 255, 255, 0.45);
+    --sheen: rgba(255, 255, 255, 0.55);
+    --glass-shadow: 0 12px 40px rgba(60, 48, 30, 0.12), 0 2px 8px rgba(60, 48, 30, 0.05);
     --text: #26211a;
     --muted: #7c705d;
     --c1: #d97706;
@@ -128,10 +130,12 @@
   html.dark {
     --bg: #06060f;
     --bg-2: #0b0b1c;
-    --card: rgba(255, 255, 255, 0.055);
-    --card-border: rgba(255, 255, 255, 0.11);
-    --glass-hi: rgba(255, 255, 255, 0.14);
-    --glass-shadow: 0 10px 36px rgba(0, 0, 0, 0.45);
+    --card: rgba(255, 255, 255, 0.07);
+    --card-border: rgba(255, 255, 255, 0.12);
+    --glass-hi: rgba(255, 255, 255, 0.22);
+    --glass-ring: rgba(255, 255, 255, 0.09);
+    --sheen: rgba(255, 255, 255, 0.06);
+    --glass-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
     --text: #eef0ff;
     --muted: #9aa0c3;
     --c1: #22d3ee;
@@ -253,7 +257,8 @@
     position: absolute; top: 0; left: 50%;
     width: 30px; height: 40px; margin: -7px 0 0 -15px;
     border-radius: 15px 15px 17px 17px;
-    background: var(--card);
+    background-color: var(--card);
+    background-image: linear-gradient(115deg, var(--sheen), transparent 45%);
     backdrop-filter: blur(14px) saturate(160%);
     -webkit-backdrop-filter: blur(14px) saturate(160%);
     border: 1.5px solid var(--card-border);
@@ -332,11 +337,12 @@
   .btn-primary:hover { transform: translateY(-2px); background-position: 100% 0; box-shadow: 0 12px 34px rgba(var(--acc-rgb), 0.5); }
   .btn-ghost {
     color: var(--text);
-    background: var(--card);
+    background-color: var(--card);
+    background-image: linear-gradient(115deg, var(--sheen), transparent 45%);
     border-color: var(--card-border);
-    backdrop-filter: blur(16px) saturate(150%);
-    -webkit-backdrop-filter: blur(16px) saturate(150%);
-    box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-hi);
+    backdrop-filter: blur(20px) saturate(170%);
+    -webkit-backdrop-filter: blur(20px) saturate(170%);
+    box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-hi), inset 0 0 0 1px var(--glass-ring);
   }
   .btn-ghost:hover { transform: translateY(-2px); border-color: rgba(var(--acc-rgb), 0.55); background: rgba(var(--acc-rgb), 0.10); }
   .btn-sm { padding: 9px 18px; font-size: 0.85rem; }
@@ -361,9 +367,10 @@
     font-family: var(--font-mono);
     font-size: 0.74rem; font-weight: 500; letter-spacing: 0.06em;
     color: var(--muted);
-    border: 1px solid var(--card-border); background: var(--card);
+    border: 1px solid var(--card-border); background-color: var(--card);
+    background-image: linear-gradient(115deg, var(--sheen), transparent 45%);
     padding: 8px 16px; border-radius: 999px; margin-bottom: 28px;
-    backdrop-filter: blur(16px) saturate(150%);
+    backdrop-filter: blur(20px) saturate(170%);
     animation: rise 0.8s ease both;
   }
   .hero h1 {
@@ -447,9 +454,10 @@
     position: absolute; z-index: 1;
     font-family: var(--font-mono);
     font-size: 0.78rem; font-weight: 500; color: var(--muted);
-    background: var(--card); border: 1px solid var(--card-border);
+    background-color: var(--card);
+    background-image: linear-gradient(115deg, var(--sheen), transparent 45%); border: 1px solid var(--card-border);
     padding: 7px 14px; border-radius: 999px;
-    backdrop-filter: blur(16px) saturate(150%);
+    backdrop-filter: blur(20px) saturate(170%);
     animation: floaty 6s ease-in-out infinite;
     transition: color 0.3s, border-color 0.3s, box-shadow 0.3s;
     will-change: transform;
@@ -513,10 +521,11 @@
   /* ---------- quiz ---------- */
   .quiz-shell { max-width: 640px; margin: 0 auto; }
   .quiz-card {
-    background: var(--card); border: 1px solid var(--card-border);
+    background-color: var(--card);
+    background-image: linear-gradient(115deg, var(--sheen), transparent 45%); border: 1px solid var(--card-border);
     border-radius: 24px; padding: 36px;
-    backdrop-filter: blur(16px) saturate(150%);
-    box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-hi);
+    backdrop-filter: blur(20px) saturate(170%);
+    box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-hi), inset 0 0 0 1px var(--glass-ring);
     min-height: 380px;
     display: flex; flex-direction: column;
   }
@@ -634,11 +643,12 @@
   }
   @media (max-width: 760px) { .cards-grid { grid-template-columns: 1fr; } }
   .why-card {
-    background: var(--card); border: 1px solid var(--card-border);
+    background-color: var(--card);
+    background-image: linear-gradient(115deg, var(--sheen), transparent 45%); border: 1px solid var(--card-border);
     border-radius: var(--radius); padding: 30px;
-    backdrop-filter: blur(16px) saturate(150%);
-    -webkit-backdrop-filter: blur(16px) saturate(150%);
-    box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-hi);
+    backdrop-filter: blur(20px) saturate(170%);
+    -webkit-backdrop-filter: blur(20px) saturate(170%);
+    box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-hi), inset 0 0 0 1px var(--glass-ring);
     transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
     position: relative; overflow: hidden;
   }
@@ -664,10 +674,11 @@
   .chip {
     display: inline-flex; align-items: center; gap: 8px;
     padding: 12px 20px; border-radius: 999px;
-    background: var(--card); border: 1px solid var(--card-border);
-    backdrop-filter: blur(16px) saturate(150%);
-    -webkit-backdrop-filter: blur(16px) saturate(150%);
-    box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-hi);
+    background-color: var(--card);
+    background-image: linear-gradient(115deg, var(--sheen), transparent 45%); border: 1px solid var(--card-border);
+    backdrop-filter: blur(20px) saturate(170%);
+    -webkit-backdrop-filter: blur(20px) saturate(170%);
+    box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-hi), inset 0 0 0 1px var(--glass-ring);
     font-family: var(--font-serif); font-size: 0.92rem; color: var(--text);
     cursor: default; transition: transform 0.18s, border-color 0.18s, box-shadow 0.18s, background 0.18s;
   }
@@ -682,11 +693,12 @@
   .brand-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
   @media (max-width: 860px) { .brand-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; } }
   .brand-card {
-    background: var(--card); border: 1px solid var(--card-border);
+    background-color: var(--card);
+    background-image: linear-gradient(115deg, var(--sheen), transparent 45%); border: 1px solid var(--card-border);
     border-radius: var(--radius); padding: 30px 24px;
-    backdrop-filter: blur(16px) saturate(150%);
-    -webkit-backdrop-filter: blur(16px) saturate(150%);
-    box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-hi);
+    backdrop-filter: blur(20px) saturate(170%);
+    -webkit-backdrop-filter: blur(20px) saturate(170%);
+    box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-hi), inset 0 0 0 1px var(--glass-ring);
     display: flex; flex-direction: column; align-items: center; gap: 18px;
     transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
   }
@@ -736,11 +748,12 @@
   /* ---------- offer ---------- */
   .offer-shell {
     max-width: 720px; margin: 0 auto;
-    background: var(--card); border: 1px solid var(--card-border);
+    background-color: var(--card);
+    background-image: linear-gradient(115deg, var(--sheen), transparent 45%); border: 1px solid var(--card-border);
     border-radius: 26px; padding: 44px;
-    backdrop-filter: blur(16px) saturate(150%);
-    -webkit-backdrop-filter: blur(16px) saturate(150%);
-    box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-hi);
+    backdrop-filter: blur(20px) saturate(170%);
+    -webkit-backdrop-filter: blur(20px) saturate(170%);
+    box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-hi), inset 0 0 0 1px var(--glass-ring);
     position: relative; overflow: hidden;
   }
   .offer-shell::before {
@@ -753,9 +766,7 @@
   .field.full { grid-column: 1 / -1; }
   .field label { font-size: 0.82rem; font-weight: 600; letter-spacing: 0.04em; color: var(--muted); text-transform: uppercase; }
   .field input, .field textarea, .field select {
-    background: var(--card);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: var(--surface-3);
     border: 1px solid var(--card-border); border-radius: 12px;
     color: var(--text); font-family: inherit; font-size: 0.98rem;
     padding: 13px 16px; outline: none; width: 100%;
@@ -785,11 +796,12 @@
   /* ---------- faq ---------- */
   .faq-list { max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
   details.faq-item {
-    background: var(--card); border: 1px solid var(--card-border);
+    background-color: var(--card);
+    background-image: linear-gradient(115deg, var(--sheen), transparent 45%); border: 1px solid var(--card-border);
     border-radius: 14px; overflow: hidden;
-    backdrop-filter: blur(16px) saturate(150%);
-    -webkit-backdrop-filter: blur(16px) saturate(150%);
-    box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-hi);
+    backdrop-filter: blur(20px) saturate(170%);
+    -webkit-backdrop-filter: blur(20px) saturate(170%);
+    box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-hi), inset 0 0 0 1px var(--glass-ring);
     transition: border-color 0.2s;
   }
   details.faq-item[open] { border-color: rgba(var(--acc-rgb), 0.45); }
@@ -870,12 +882,13 @@
   /* ---------- toast ---------- */
   .toast {
     position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px);
-    background: var(--card); color: var(--text);
-    backdrop-filter: blur(16px) saturate(150%);
-    -webkit-backdrop-filter: blur(16px) saturate(150%);
+    background-color: var(--card);
+    background-image: linear-gradient(115deg, var(--sheen), transparent 45%); color: var(--text);
+    backdrop-filter: blur(20px) saturate(170%);
+    -webkit-backdrop-filter: blur(20px) saturate(170%);
     border: 1px solid var(--card-border); border-radius: 12px;
     padding: 13px 22px; font-size: 0.9rem; z-index: 200;
-    box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-hi);
+    box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-hi), inset 0 0 0 1px var(--glass-ring);
     opacity: 0; transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s;
     max-width: 90vw; text-align: center;
   }
