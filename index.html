@@ -941,7 +941,7 @@
 </header>
 
 <!-- theme pull-cord — asli rassi, pakdo kheencho chhodo -->
-<button class="pull-cord" id="theme-cord" type="button" aria-label="Toggle dark / light mode" title="Rassi kheencho — dark / light">
+<button class="pull-cord" id="theme-cord" type="button" aria-label="Toggle dark / light mode" title="Pull the cord — toggle dark / light">
   <svg class="cord-rope" aria-hidden="true"><path class="cord-path" d=""/><path class="cord-strand" d=""/></svg>
   <span class="cord-knob" aria-hidden="true">
     <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M18.8 5.2l-1.6 1.6M6.8 17.2l-1.6 1.6"/></svg>
@@ -1748,7 +1748,7 @@ async function startQuiz() {
     currentSet = qs;
   } else {
     currentSet = localQuestions(5);
-    toast("⚡ AI thoda busy tha — classic questions on!");
+    toast("⚡ AI is a bit busy right now — classic questions loaded!");
   }
   quizBusy = false;
   quizScore = 0; points = 0; streak = 0; quizIndex = 0;
@@ -2043,7 +2043,7 @@ let lastPointerUp = 0, lastFlip = 0;
 const st = {
   kx: 0, ky: 110, vx: 0, vy: 0,       // knob offset anchor (top-centre) se
   tx: 0, ty: 110,                      // pointer target (button space)
-  ax: 0, REST: 116, REACH: 165, ENGAGE: 54,
+  ax: 0, sx: 0, sy: 0, REST: 116, REACH: 165, ENGAGE: 54,
   dragging: false, engaged: false, pid: null, captured: false, lostSince: 0,
   t0: performance.now(), last: performance.now(),
 };
@@ -2138,6 +2138,7 @@ cord.addEventListener("pointerdown", (e) => {
   try { cord.setPointerCapture(e.pointerId); st.captured = cord.hasPointerCapture(e.pointerId); } catch (err) {}
   const r = cord.getBoundingClientRect();
   st.ax = r.left + r.width / 2;
+  st.sx = e.clientX; st.sy = e.clientY;   // jahan pakda — flip ka faisla isi se
   st.dragging = true;
   st.engaged = false;
   st.lostSince = 0;
@@ -2155,7 +2156,10 @@ cord.addEventListener("pointermove", (e) => {
   const dd = Math.hypot(dx, dy);
   const lim = Math.min(dd, st.REACH - 18);
   st.tx = dx / dd * lim; st.ty = dy / dd * lim;
-  const eng = dd >= st.ENGAGE;
+  /* flip ka faisla: pakadne ki jagah se kitni displacement hui —
+     anchor se nahi, warna click ki 1-2px micro-move bhi flip kar deti */
+  const moved = Math.hypot(e.clientX - st.sx, e.clientY - st.sy);
+  const eng = moved >= st.ENGAGE;
   if (eng !== st.engaged) { st.engaged = eng; cord.classList.toggle("engaged", eng); }
 });
 
