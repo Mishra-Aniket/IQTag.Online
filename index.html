@@ -2045,9 +2045,8 @@ $("#offer-form").addEventListener("submit", async (e) => {
       "&body=" + encodeURIComponent(composeOffer(data));
   };
 
-  try {
-    /* random alias — naked email spam bots ke liye safe + repeated activation emails band */
-    const res = await fetch("https://formsubmit.co/ajax/057cf042822882a918776fd2d70d527", {
+  const fsPost = async (to) => {
+    const res = await fetch("https://formsubmit.co/ajax/" + to, {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json" },
       body: JSON.stringify({
@@ -2063,7 +2062,14 @@ $("#offer-form").addEventListener("submit", async (e) => {
     });
     const out = await res.json();
     window.__fsOut = out;
-    if (res.ok && String(out.success) === "true") {
+    return { ok: res.ok && String(out.success) === "true" };
+  };
+
+  try {
+    /* pehle spam-safe alias; fail hone par naked email; wo bhi fail to mailto */
+    let r = await fsPost("057cf042822882a918776fd2d70d527");
+    if (!r.ok) r = await fsPost(CONFIG.email);
+    if (r.ok) {
       toast("✅ Offer sent — I\'ll get back to you shortly.");
       $("#offer-form").reset();
     } else {
